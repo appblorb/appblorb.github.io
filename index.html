@@ -97,6 +97,7 @@ body.dark .nav { color: var(--cream); }
 .btn:active { transform: scale(.96); }
 .btn.small { min-height: 46px; padding: 8px 20px; font-size: .95em; }
 .btn.coral { background: var(--coral); color: var(--ink); }
+.btn:disabled { opacity: .75; cursor: default; transform: none; }
 body.dark .nav .btn { background: var(--cream); color: var(--ink); }
 
 /* ---------- sections ---------- */
@@ -302,12 +303,12 @@ body.dark .nav .btn { background: var(--cream); color: var(--ink); }
 </section>
 
 <div id="meet">
-<section class="scene meet" data-scene="m0" data-bg="#D9D8DC"><h3 class="name">soot</h3><div class="say fg"><p>the deadpan one. squat, slouchy, tiny smirk.</p><p class="col">black</p><a class="btn" href="#waitlist">get soot</a></div></section>
-<section class="scene meet" data-scene="m1" data-bg="#FFC3BA"><h3 class="name">pip</h3><div class="say fg"><p>the hype one. tall, tilted head, biggest grin.</p><p class="col">coral pink</p><a class="btn" href="#waitlist">get pip</a></div></section>
-<section class="scene meet" data-scene="m2" data-bg="#CDEFE3"><h3 class="name">dew</h3><div class="say fg"><p>the calm one. melted flat like a puddle.</p><p class="col">seafoam green</p><a class="btn" href="#waitlist">get dew</a></div></section>
-<section class="scene meet" data-scene="m3" data-bg="#FBEBAF"><h3 class="name">bean</h3><div class="say fg"><p>the goofball. lopsided lean, mismatched eyes.</p><p class="col">butter yellow</p><a class="btn" href="#waitlist">get bean</a></div></section>
-<section class="scene meet" data-scene="m4" data-bg="#DFD5F6"><h3 class="name">mim</h3><div class="say fg"><p>the shy one. smallest, eyes close together.</p><p class="col">lilac</p><a class="btn" href="#waitlist">get mim</a></div></section>
-<section class="scene meet" data-scene="m5" data-bg="#C3DEF9"><h3 class="name">glub</h3><div class="say fg"><p>the dreamer. roundest belly, always looking up.</p><p class="col">sky blue</p><a class="btn" href="#waitlist">get glub</a></div></section>
+<section class="scene meet" id="soot" data-scene="m0" data-bg="#D9D8DC"><h3 class="name">soot</h3><div class="say fg"><p>the deadpan one. squat, slouchy, tiny smirk.</p><p class="col">black</p><a class="btn" href="#waitlist">get soot</a></div></section>
+<section class="scene meet" id="pip" data-scene="m1" data-bg="#FFC3BA"><h3 class="name">pip</h3><div class="say fg"><p>the hype one. tall, tilted head, biggest grin.</p><p class="col">coral pink</p><a class="btn" href="#waitlist">get pip</a></div></section>
+<section class="scene meet" id="dew" data-scene="m2" data-bg="#CDEFE3"><h3 class="name">dew</h3><div class="say fg"><p>the calm one. melted flat like a puddle.</p><p class="col">seafoam green</p><a class="btn" href="#waitlist">get dew</a></div></section>
+<section class="scene meet" id="bean" data-scene="m3" data-bg="#FBEBAF"><h3 class="name">bean</h3><div class="say fg"><p>the goofball. lopsided lean, mismatched eyes.</p><p class="col">butter yellow</p><a class="btn" href="#waitlist">get bean</a></div></section>
+<section class="scene meet" id="mim" data-scene="m4" data-bg="#DFD5F6"><h3 class="name">mim</h3><div class="say fg"><p>the shy one. smallest, eyes close together.</p><p class="col">lilac</p><a class="btn" href="#waitlist">get mim</a></div></section>
+<section class="scene meet" id="glub" data-scene="m5" data-bg="#C3DEF9"><h3 class="name">glub</h3><div class="say fg"><p>the dreamer. roundest belly, always looking up.</p><p class="col">sky blue</p><a class="btn" href="#waitlist">get glub</a></div></section>
 </div>
 
 <section class="scene block" id="friends" data-scene="friends" data-bg="#FF7F6E">
@@ -394,7 +395,7 @@ body.dark .nav .btn { background: var(--cream); color: var(--ink); }
     <div class="joined" id="wlDone" hidden>
       <p class="big" role="status" tabindex="-1" id="wlStatus">you’re on the list.</p>
       <p>the whole gang is saving your spot. check your inbox for a hello from the blorbs, then go be somewhere.</p>
-      <p class="cap">(demo only: this page doesn’t save emails or send that hello yet.)</p>
+      <p class="cap" id="wlDemo">(demo only: this page doesn’t save emails or send that hello yet.)</p>
     </div>
   </div></div>
   <footer class="foot fg"><span>blorbs · 2026</span><span>made for being somewhere else.</span></footer>
@@ -1080,13 +1081,36 @@ var Blorb3D = (function () {
     });
   });
 
-  // waitlist (demo: nothing is saved or sent)
-  var email = $('email'), joinBtn = $('joinBtn'), wlErr = $('wlErr');
+  // waitlist. Signups go to a Kit form once its ID is known: either typed between the quotes on
+  // the next line, or saved as the only text in a file named kit-form.txt next to this page.
+  // Until then the form is a demo: it saves nothing and sends nothing.
+  var KIT_FORM = '';
+  var email = $('email'), joinBtn = $('joinBtn'), wlErr = $('wlErr'), badEmail = wlErr.textContent, joinLabel = joinBtn.textContent, kitUrl = '';
+  function useKit(v) { var m = /(\d{4,})/.exec(String(v || '')); if (m) { kitUrl = 'https://app.kit.com/forms/' + m[1] + '/subscriptions'; $('wlDemo').hidden = true; } }
+  useKit(KIT_FORM);
+  if (!kitUrl && window.fetch && /^https?:$/.test(location.protocol)) {
+    fetch('kit-form.txt', { cache: 'no-store' }).then(function (r) { return r.ok ? r.text() : ''; }).then(function (t) { if (t.length < 200) useKit(t); }).catch(function () {});
+  }
+  function showErr(msg) { wlErr.textContent = msg; wlErr.hidden = false; }
+  function busy(on) { joinBtn.disabled = on; joinBtn.textContent = on ? 'joining...' : joinLabel; }
+  function joined() { wlErr.hidden = true; $('wlForm').hidden = true; $('wlDone').hidden = false; $('wlStatus').focus(); wave(); }
   function join() {
     var v = (email.value || '').trim();
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) { wlErr.hidden = false; email.focus(); return; }
-    wlErr.hidden = true; $('wlForm').hidden = true; $('wlDone').hidden = false; $('wlStatus').focus();
-    wave();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) { showErr(badEmail); email.focus(); return; }
+    if (!kitUrl) { joined(); return; }
+    if (joinBtn.disabled) return;
+    wlErr.hidden = true; busy(true);
+    var data = new FormData(); data.append('email_address', v);
+    fetch(kitUrl, { method: 'POST', body: data, headers: { Accept: 'application/json' } })
+      .then(function (r) { return r.json().catch(function () { return { status: r.ok ? 'success' : 'failed' }; }); })
+      .then(function (j) {
+        busy(false);
+        if (j && j.status === 'success') { joined(); return; }
+        // Kit sometimes asks for a quick human check before it accepts a signup
+        if (j && j.status === 'quarantined' && /^https:\/\/([a-z0-9-]+\.)*(kit|convertkit)\.com\//.test(j.url || '')) { window.location.href = j.url; return; }
+        showErr('that didn’t go through. check the address and try again.');
+      })
+      .catch(function () { busy(false); showErr('couldn’t reach the waitlist. check your connection and try again.'); });
   }
   joinBtn.addEventListener('click', join);
   email.addEventListener('keydown', function (ev) { if (ev.key === 'Enter') join(); });
