@@ -6,7 +6,7 @@
 <meta name="color-scheme" content="light">
 <meta name="theme-color" content="#F2F3F0">
 <title>blorbs: made for being somewhere else.</title>
-<script>document.documentElement.classList.toggle('narrow', innerWidth < 820 || innerWidth / innerHeight < 1.05);</script>
+<script>(function () { var d = document.documentElement, n = innerWidth < 820 || innerWidth / innerHeight < 1.05; d.classList.toggle('narrow', n); d.classList.toggle('phone', n && innerWidth < 560); })();</script>
 <meta name="description" content="a blorb is a small magnetic buddy that locks your distracting apps until you get up and tap it.">
 <link rel="canonical" href="https://blorb.app/">
 <meta property="og:type" content="website">
@@ -116,7 +116,7 @@ body.dark .nav .btn { background: var(--cream); color: var(--ink); }
 .hero { min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; text-align: center; padding: clamp(84px, 14.5vh, 150px) var(--pad) 32vh; }
 .hero .slot { width: min(46vh, 40vw, 540px); aspect-ratio: 1800 / 747; flex: none; cursor: pointer; }
 .hero h1 { font-size: clamp(32px, min(3.6vw, 6.4vh), 60px); margin-top: .2em; }
-.hero .lede { margin-top: 1em; max-width: 31em; font-size: clamp(15px, 1.2vw, 18px); }
+.hero .lede { margin-top: 1em; max-width: 37em; font-size: clamp(15px, 1.2vw, 18px); }
 .hero .cta { margin-top: 1.4em; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px 16px; font-size: clamp(15px, 1.1vw, 17px); }
 .hero .cta .btn { min-height: 46px; padding: 8px 22px; }
 .hero .note { font-weight: 700; }
@@ -215,6 +215,12 @@ body.dark .nav .btn { background: var(--cream); color: var(--ink); }
 .narrow .hero .lede { margin-top: 1.1em; max-width: 34em; font-size: 1.08em; }
 .narrow .hero .cta { margin-top: 1.5em; gap: 12px 20px; font-size: 1em; }
 .narrow .hero .cta .btn { min-height: 52px; padding: 10px 26px; }
+.phone .hero { justify-content: center; padding: 64px var(--pad) 21vh; padding-bottom: 21svh; }
+.phone .hero .slot { width: min(52vw, 26vh, 230px); }
+.phone .hero h1 { font-size: clamp(26px, 7.4vw, 33px); margin-top: .25em; }
+.phone .hero .lede { margin-top: .8em; max-width: 20em; font-size: 15.5px; }
+.phone .hero .cta { margin-top: 1.15em; gap: 8px 14px; font-size: 15px; }
+.phone .hero .cta .btn { min-height: 46px; padding: 8px 22px; }
 .narrow .how { align-items: flex-end; min-height: 90vh; padding-bottom: 12vh; }
 .narrow .pin-in { align-items: flex-end; padding-bottom: clamp(26px, 7vh, 70px); }
 .narrow .copy { max-width: 34em; }
@@ -265,7 +271,7 @@ body.dark .nav .btn { background: var(--cream); color: var(--ink); }
 <section class="scene hero" data-scene="hero" data-bg="#F2F3F0">
   <div class="slot" id="heroSlot" aria-hidden="true"></div>
   <h1 class="fg">made for being<br>somewhere else.</h1>
-  <p class="lede fg">stick a blorb somewhere you’d have to get up for. lock the apps that eat your day from the app or by tapping its belly. they stay locked until you tap the belly.</p>
+  <p class="lede fg">stick a blorb somewhere you’d have to get up for. lock the apps.</p>
   <div class="cta fg"><a class="btn" href="#waitlist">join the waitlist</a><span class="note">$30 USD. not out yet.</span></div>
 </section>
 
@@ -655,16 +661,25 @@ var Blorb3D = (function () {
 
   // ------------------------------------------------------------------ layout
   var VH = 8, FOV = 24, D = (VH / 2) / Math.tan(FOV / 2 * Math.PI / 180);
-  var vw = 0, vh = 0, WU = 6, narrow = false;
+  var vw = 0, vh = 0, WU = 6, narrow = false, isPhone = false, heroFreeY = -1.5, sceneById = {};
   var scenes = [].map.call(document.querySelectorAll('[data-scene]'), function (el) { return { el: el, id: el.getAttribute('data-scene'), bg: hex(el.getAttribute('data-bg')), top: 0, h: 1 }; });
-  var heroSlot = $('heroSlot'), navSlot = $('navSlot'), logo = $('logo'), heroRect = null, navRect = null;
+  var heroSlot = $('heroSlot'), navSlot = $('navSlot'), logo = $('logo'), heroRect = null, navRect = null, heroCta = document.querySelector('.hero .cta');
+  scenes.forEach(function (s) { sceneById[s.id] = s; });
 
   // ------------------------------------------------------------------ poses
   // blorbs: 0 soot, 1 pip, 2 dew, 3 bean, 4 mim, 5 glub
   function side(i) { return (i === 0 || i === 2 || i === 4) ? -1 : 1; }
   var FLY = [-0.3, 1.7, -2.5, -0.5, 1.9, -2.6];
   function off(i) { return P({ x: side(i) * (WU + 2.9), y: FLY[i], z: 1.2, s: 0.9, fl: 1, rz: side(i) * 0.3 }); }
-  function pipSpot() { return narrow ? { x: -0.72, y: 2.0, s: 1.05 } : { x: WU * 0.5, y: 1.15, s: 1.45 }; }
+  function zone(id) {
+    var s = sceneById[id], top = VH / 2 - (64 / vh) * VH, bot = (s && s.zoneBot !== undefined) ? s.zoneBot : -1.0;
+    return { top: top, bot: bot, f: clamp((top - bot) / 3.5, 0.55, 1), k: clamp(WU / 1.85, 1, 1.5) };
+  }
+  function pipSpot(id) {
+    if (!narrow) return { x: WU * 0.5, y: 1.15, s: 1.45 };
+    var z = zone(id), s = 1.05 * z.f;
+    return { x: -0.72 * z.k, y: z.top - 0.2 - 1.08 * s, s: s };
+  }
   function lineup(i, y, k) {
     var sp = narrow ? (2 * WU) / 6.3 : Math.min(2.05, (2 * WU - 1.2) / 5.7), s = (narrow ? sp * 0.64 : sp / 2.05 * 1.2) * k;
     return P({ x: (i - 2.5) * sp, y: y + 0.12 * Math.sin(i * 1.9), z: 0.4 + (i % 2) * 0.12, s: s, rz: 0.05 * Math.sin(i * 2.3), fl: 0.55 });
@@ -696,12 +711,12 @@ var Blorb3D = (function () {
     },
     tap: function (i, p) {
       if (i !== 1) return off(i);
-      var b = pipSpot();
+      var b = pipSpot('tap');
       return P({ x: b.x, y: b.y, s: b.s, z: 0, rz: -0.05, fl: 0.1 });
     },
     go: function (i, p) {
       if (i !== 1) return off(i);
-      var b = pipSpot();
+      var b = pipSpot('go');
       return P({ x: b.x, y: b.y, s: b.s, z: 0, rz: -0.05 + 0.03 * Math.sin(p * 9), fl: 0.12, sq: kf(p, [[0.765, 0], [0.795, 0.7], [0.85, -0.2], [0.9, 0]]) });
     },
     friends: function (i, p) {
@@ -725,25 +740,34 @@ var Blorb3D = (function () {
   };
   [0, 1, 2, 3, 4, 5].forEach(function (j) { POSE['m' + j] = function (i, p) { return meetPose(i, j - 0.5 + p); }; });
   // tidy the hero table (kept simple: one list, float factor added)
-  POSE.hero = (function () {
-    return function (i) {
-      if (narrow) {
-        var col = i % 3, row = (i / 3) | 0, gx = WU * 0.63;
-        return P({ x: (col - 1) * gx + (row ? 0.08 : -0.06), y: (row ? -3.25 : -2.1) + [0.05, -0.08, 0.04][col], z: 0.6, s: 0.5, rz: [0.08, -0.06, 0.07, -0.08, 0.06, -0.05][i], fl: 0.8 });
-      }
-      var sp = Math.min(2.05, (2 * WU - 1.2) / 5.7);
-      var T = { x: (i - 2.5) * sp, y: -2.72 + [0.07, -0.05, 0.09, -0.04, 0.06, -0.08][i], z: 0.6 + (i % 2) * 0.18, rz: [0.07, -0.06, 0.05, -0.08, 0.06, -0.05][i], s: sp / 2.05 * 0.8, fl: 0.85 };
-      return P(T);
-    };
-  })();
+  POSE.hero = function (i) {
+    var yBot = -VH / 2, avail = heroFreeY - yBot, sp, s, y;
+    var jit = [0.07, -0.05, 0.09, -0.04, 0.06, -0.08][i], rzs = [0.07, -0.06, 0.05, -0.08, 0.06, -0.05][i];
+    if (isPhone) {                                 // phones: one small row along the bottom edge
+      sp = (2 * WU) / 6.3; s = Math.max(0.2, Math.min(sp * 0.66, (avail - 0.3) / 2.5)); y = yBot + 0.16 + 1.12 * s;
+      return P({ x: (i - 2.5) * sp, y: y + jit * 0.5, z: 0.4 + (i % 2) * 0.14, s: s, rz: rzs, fl: 0.7 });
+    }
+    if (narrow) {                                  // roomy portrait windows: two loose rows of three
+      var col = i % 3, row = (i / 3) | 0, gx = WU * 0.63;
+      s = Math.max(0.25, Math.min(0.5, (avail - 0.3) / 4.6));
+      var yLow = yBot + 0.2 + 1.12 * s;
+      return P({ x: (col - 1) * gx + (row ? 0.08 : -0.06), y: (row ? yLow : yLow + 2.3 * s) + [0.05, -0.08, 0.04][col], z: 0.6, s: s, rz: [0.08, -0.06, 0.07, -0.08, 0.06, -0.05][i], fl: 0.8 });
+    }
+    sp = Math.min(2.05, (2 * WU - 1.2) / 5.7); s = sp / 2.05 * 0.8; y = -2.72;        // wide: one row along the bottom
+    if (y + 1.2 * s > heroFreeY - 0.2) { s = Math.max(0.3, Math.min(s, (avail - 0.45) / 2.4)); y = yBot + 0.2 + 1.2 * s; }
+    return P({ x: (i - 2.5) * sp, y: y + jit, z: 0.6 + (i % 2) * 0.18, rz: rzs, s: s, fl: 0.85 });
+  };
 
-  function phoneKeys() {
-    var b = pipSpot();
-    if (narrow) return {
-      away: P({ x: WU + 2.2, y: 0.1, z: 2.2, rx: -0.1, rz: -0.2, s: 0.6 }),
-      hov: P({ x: 0.97, y: 0.5, z: 2.0, rx: -0.06, rz: -0.05, s: 0.58 }),
-      tap: P({ x: 0.12, y: 0.72, z: 0.2 + 0.43 * b.s, rx: -0.02, rz: -0.02, s: 0.6 })
-    };
+  function phoneKeys(id) {
+    var b = pipSpot(id);
+    if (narrow) {
+      var z = zone(id), sP = 0.58 * z.f, per = 1.119, hy = (z.bot + 0.15 + 2.5 * sP * per) / per;
+      return {
+        away: P({ x: WU + 2.2, y: hy - 0.4, z: 2.2, rx: -0.1, rz: -0.2, s: sP }),
+        hov: P({ x: 0.97 * z.k, y: hy, z: 2.0, rx: -0.06, rz: -0.05, s: sP }),
+        tap: P({ x: 0.12 * z.k, y: b.y - 1.28 * z.f, z: 0.2 + 0.43 * b.s, rx: -0.02, rz: -0.02, s: sP })
+      };
+    }
     var hx = b.x + 0.25;
     return {
       away: P({ x: hx + 0.5, y: -8.4, z: 2.2, rx: -0.3, rz: -0.14 }),
@@ -752,10 +776,10 @@ var Blorb3D = (function () {
     };
   }
   var PHONE = {
-    tap: function (p) { var k = phoneKeys(), dip = mix(k.hov, P({ x: k.hov.x, y: k.hov.y, z: k.hov.z - 0.22, rx: k.hov.rx - 0.05, rz: k.hov.rz, s: k.hov.s }), 1); return path(p, [[0.10, k.away], [0.34, k.hov], [0.465, k.hov], [0.495, dip], [0.54, k.hov], [1, k.hov]]); },
-    go: function (p) { var k = phoneKeys(); return path(p, [[0, k.hov], [0.22, k.away], [0.56, k.away], [0.68, k.hov], [0.71, k.hov], [0.77, k.tap], [0.83, k.tap], [0.95, k.hov], [1, k.hov]]); }
+    tap: function (p) { var k = phoneKeys('tap'), dip = mix(k.hov, P({ x: k.hov.x, y: k.hov.y, z: k.hov.z - 0.22, rx: k.hov.rx - 0.05, rz: k.hov.rz, s: k.hov.s }), 1); return path(p, [[0.10, k.away], [0.34, k.hov], [0.465, k.hov], [0.495, dip], [0.54, k.hov], [1, k.hov]]); },
+    go: function (p) { var k = phoneKeys('go'); return path(p, [[0, k.hov], [0.22, k.away], [0.56, k.away], [0.68, k.hov], [0.71, k.hov], [0.77, k.tap], [0.83, k.tap], [0.95, k.hov], [1, k.hov]]); }
   };
-  scenes.forEach(function (s) { s.pose = POSE[s.id] || off; s.phone = PHONE[s.id] || function () { return phoneKeys().away; }; });
+  scenes.forEach(function (s) { s.pose = POSE[s.id] || off; s.phone = PHONE[s.id] || function () { return phoneKeys('tap').away; }; });
 
   function locate(c) {
     var k = 0;
@@ -923,11 +947,16 @@ var Blorb3D = (function () {
 
   // ------------------------------------------------------------------ measure / resize
   function measure() {
-    vw = document.documentElement.clientWidth; vh = window.innerHeight; narrow = vw < 820 || vw / vh < 1.05;
-    document.documentElement.classList.toggle('narrow', narrow);
+    vw = document.documentElement.clientWidth; vh = window.innerHeight; narrow = vw < 820 || vw / vh < 1.05; isPhone = narrow && vw < 560;
+    document.documentElement.classList.toggle('narrow', narrow); document.documentElement.classList.toggle('phone', isPhone);
     WU = VH * (vw / vh) / 2;
     var sy = window.pageYOffset;
-    scenes.forEach(function (s) { var r = s.el.getBoundingClientRect(); s.top = r.top + sy; s.h = Math.max(r.height, 1); });
+    scenes.forEach(function (s) {
+      var r = s.el.getBoundingClientRect(); s.top = r.top + sy; s.h = Math.max(r.height, 1);
+      var pin = s.el.querySelector('.pin-in'), cp = pin && pin.querySelector('.copy');
+      if (cp) { var pb = parseFloat(getComputedStyle(pin).paddingBottom) || 0; s.zoneBot = VH / 2 - ((pin.offsetHeight - pb - cp.offsetHeight) / vh) * VH; }
+    });
+    heroFreeY = VH / 2 - ((heroCta.getBoundingClientRect().bottom + sy) / vh) * VH;
     var hr = heroSlot.getBoundingClientRect(), nr = navSlot.getBoundingClientRect();
     heroRect = { x: hr.left, y: hr.top + sy, w: hr.width };
     var nw = nr.width, nh = nw / LOGO_ASPECT;
