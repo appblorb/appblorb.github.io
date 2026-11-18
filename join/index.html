@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#FF7F6E">
+<meta name="robots" content="noindex">
+<title>you’re invited to a blorb space.</title>
+<meta property="og:title" content="you’re invited to a blorb space.">
+<meta property="og:description" content="your blorb goes up against your friends’ blorbs every day. most hours away from the phone wins.">
+<!--
+  Where an invite lands when the phone does not have the app (with the app installed,
+  iOS opens the app instead). Links look like  /join/?c=K7QF2M
+-->
+<style>
+:root { --paper: #F2F3F0; --ink: #1E1D1F; --coral: #FF7F6E; --font: 'M PLUS Rounded 1c', 'Hiragino Maru Gothic ProN', 'Arial Rounded MT Bold', 'Nunito', system-ui, sans-serif; }
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; min-height: 100svh; display: flex; align-items: center; justify-content: center; background: var(--coral); color: var(--ink);
+  font-family: var(--font); font-weight: 500; font-size: 18px; line-height: 1.5; -webkit-font-smoothing: antialiased;
+  padding: calc(24px + env(safe-area-inset-top, 0px)) 24px calc(24px + env(safe-area-inset-bottom, 0px)); }
+main { width: 100%; max-width: 30em; text-align: center; }
+h1 { margin: 0; font-weight: 900; font-size: clamp(40px, 11vw, 76px); line-height: 1; letter-spacing: -0.02em; text-wrap: balance; }
+p { margin: .8em auto 0; max-width: 24em; text-wrap: pretty; }
+.code { margin: 1.2em auto 0; display: inline-block; padding: 14px 26px; border-radius: 26px; background: #FFFFFF; font-weight: 900; font-size: clamp(30px, 9vw, 44px); line-height: 1; letter-spacing: .12em; font-variant-numeric: tabular-nums; }
+.cta { margin-top: 1.6em; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 54px; padding: 10px 28px; border-radius: 999px; background: var(--ink); color: var(--paper);
+  font-weight: 800; font-size: 1.02em; line-height: 1.1; text-decoration: none; transition: transform .18s cubic-bezier(.3, 1.6, .5, 1); }
+.btn:active { transform: scale(.96); }
+.btn.line { background: transparent; color: var(--ink); border: 3px solid var(--ink); }
+.cap { margin-top: 1.6em; font-size: .86em; }
+:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; border-radius: 999px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>you’re invited.</h1>
+  <p>your blorb goes up against your friends’ blorbs every day. most hours away from the phone wins.</p>
+  <div class="code" id="code" hidden></div>
+  <div class="cta">
+    <a class="btn" id="open" href="blorb://join">open the blorb app</a>
+    <a class="btn line" href="/">get a blorb</a>
+  </div>
+  <p class="cap">no app yet? once it’s on your phone, choose “join with a code” and type the code above.</p>
+</main>
+<script>
+(function () {
+  var code = (new URLSearchParams(location.search).get('c') || '').toUpperCase().replace(/[^2-9A-HJ-NP-Z]/g, '').slice(0, 6);
+  if (code.length !== 6) return;
+  var el = document.getElementById('code'); el.textContent = code; el.hidden = false;
+  document.getElementById('open').href = 'blorb://join?c=' + code;
+})();
+</script>
+</body>
+</html>

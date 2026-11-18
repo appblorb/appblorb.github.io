@@ -200,6 +200,8 @@ body.dark .nav .btn { background: var(--cream); color: var(--ink); }
 .joined .big { font-size: clamp(34px, 4vw, 60px); }
 .joined p + p { margin-top: .7em; }
 .joined .cap { color: #B7B4BD; }
+.form .consent { margin: 12px 0 0 18px; text-align: left; color: #B7B4BD; }
+.foot .legal a { text-underline-offset: 4px; }
 .foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; padding: 22px var(--pad) calc(26px + env(safe-area-inset-bottom, 0px)); font-size: .9em; font-weight: 700; }
 
 /* doodles */
@@ -398,6 +400,7 @@ body.dark .nav .btn { background: var(--cream); color: var(--ink); }
         <button class="btn coral" id="joinBtn" type="button">join the waitlist</button>
       </div>
       <p class="err" id="wlErr" role="alert" hidden>that doesn’t look like an email yet.</p>
+      <p class="cap consent">we’ll only email you about blorbs. unsubscribe any time. <a href="/privacy/">privacy</a></p>
     </div>
     <div class="joined" id="wlDone" hidden>
       <p class="big" role="status" tabindex="-1" id="wlStatus">you’re on the list.</p>
@@ -405,7 +408,7 @@ body.dark .nav .btn { background: var(--cream); color: var(--ink); }
       <p class="cap" id="wlDemo">(demo only: this page doesn’t save emails or send that hello yet.)</p>
     </div>
   </div></div>
-  <footer class="foot fg"><span>blorbs · 2026</span><span>made for being somewhere else.</span></footer>
+  <footer class="foot fg"><span>blorbs · 2026</span><span class="legal"><a href="/privacy/">privacy</a> · <a href="/terms/">terms</a> · <a href="/refunds/">refunds</a> · <a href="/support/">help</a></span><span>made for being somewhere else.</span></footer>
 </section>
 
 </main>
