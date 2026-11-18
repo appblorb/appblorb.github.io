@@ -1,0 +1,15 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["WVVPTV9U33.app.blorb.ios"],
+        "components": [
+          { "/": "/tap", "comment": "a tap on a blorb" },
+          { "/": "/tap/*", "comment": "a tap on a blorb" },
+          { "/": "/join", "comment": "an invite to a space" },
+          { "/": "/join/*", "comment": "an invite to a space" }
+        ]
+      }
+    ]
+  }
+}
