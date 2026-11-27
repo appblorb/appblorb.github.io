@@ -194,6 +194,9 @@ body.dark .nav .btn { background: var(--cream); color: var(--ink); }
 .form input { flex: 1 1 240px; min-width: 0; min-height: 56px; padding: 10px 22px; border-radius: 999px; border: 3px solid var(--cream); background: #FFFFFF; color: var(--ink); font-weight: 700; }
 .form input::placeholder { color: #6C6972; font-weight: 500; }
 .form .btn { min-height: 56px; }
+.waitlist .buyline { margin-top: 1.5em; }
+.waitlist .form .btn { background: var(--cream); color: var(--ink); }
+.waitlist .form { margin-top: 2.6em; }
 .err { margin: 10px 0 0 18px; font-weight: 700; color: #FFB3A7; }
 .joined { margin: 1.2em auto 0; max-width: 30em; }
 #wlStatus:focus { outline: none; }
@@ -265,9 +268,8 @@ body.dark .nav .btn { background: var(--cream); color: var(--ink); }
     <a href="#meet">the blorbs</a>
     <a href="#friends">with friends</a>
     <a href="#bursts">bursts</a>
-    <a href="/shop/">shop</a>
   </nav>
-  <a class="btn small" href="#waitlist">join the waitlist</a>
+  <a class="btn small" href="/shop/">shop</a>
 </header>
 
 <main id="top">
@@ -276,7 +278,7 @@ body.dark .nav .btn { background: var(--cream); color: var(--ink); }
   <div class="slot" id="heroSlot" aria-hidden="true"></div>
   <h1 class="fg">made for being<br>somewhere else.</h1>
   <p class="lede fg">stick a blorb somewhere you’d have to get up for. lock the apps.</p>
-  <div class="cta fg"><a class="btn" href="#waitlist">join the waitlist</a><span class="note">$30 USD. not out yet.</span></div>
+  <div class="cta fg"><a class="btn" href="/shop/">get a blorb</a><span class="note">$30 USD each.</span></div>
 </section>
 
 <section class="scene how" id="how" data-scene="how" data-bg="#F2F3F0">
@@ -393,19 +395,20 @@ body.dark .nav .btn { background: var(--cream); color: var(--ink); }
 <section class="scene waitlist" id="waitlist" data-scene="waitlist" data-bg="#1E1D1F">
   <div class="mid"><div class="wrap fg">
     <h2>want one?</h2>
-    <p class="lead">blorbs aren’t out yet. leave your email and we’ll tell you the minute they are.</p>
+    <p class="lead">six blorbs, one for every mood. $30 USD each.</p>
+    <p class="buyline"><a class="btn coral" href="/shop/">get a blorb</a></p>
     <div class="form" id="wlForm">
-      <label for="email">your email</label>
+      <label for="email">or get news from the blorbs</label>
       <div class="row">
         <input id="email" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com">
-        <button class="btn coral" id="joinBtn" type="button">join the waitlist</button>
+        <button class="btn" id="joinBtn" type="button">keep me posted</button>
       </div>
       <p class="err" id="wlErr" role="alert" hidden>that doesn’t look like an email yet.</p>
       <p class="cap consent">we’ll only email you about blorbs. unsubscribe any time. <a href="/privacy/">privacy</a></p>
     </div>
     <div class="joined" id="wlDone" hidden>
-      <p class="big" role="status" tabindex="-1" id="wlStatus">you’re on the list.</p>
-      <p>the whole gang is saving your spot. check your inbox for a hello from the blorbs, then go be somewhere.</p>
+      <p class="big" role="status" tabindex="-1" id="wlStatus">you’re in.</p>
+      <p>check your inbox for a hello from the blorbs, then go be somewhere.</p>
       <p class="cap" id="wlDemo">(demo only: this page doesn’t save emails or send that hello yet.)</p>
     </div>
   </div></div>
@@ -1108,7 +1111,7 @@ var Blorb3D = (function () {
     });
   });
 
-  // waitlist. Signups go to a Kit form once its ID is known: either typed between the quotes on
+  // email sign-up (news from the blorbs). Signups go to a Kit form once its ID is known: either typed between the quotes on
   // the next line, or saved as the only text in a file named kit-form.txt next to this page.
   // Until then the form is a demo: it saves nothing and sends nothing.
   var KIT_FORM = '';
@@ -1119,7 +1122,7 @@ var Blorb3D = (function () {
     fetch('kit-form.txt', { cache: 'no-store' }).then(function (r) { return r.ok ? r.text() : ''; }).then(function (t) { if (t.length < 200) useKit(t); }).catch(function () {});
   }
   function showErr(msg) { wlErr.textContent = msg; wlErr.hidden = false; }
-  function busy(on) { joinBtn.disabled = on; joinBtn.textContent = on ? 'joining...' : joinLabel; }
+  function busy(on) { joinBtn.disabled = on; joinBtn.textContent = on ? 'sending...' : joinLabel; }
   function joined() { wlErr.hidden = true; $('wlForm').hidden = true; $('wlDone').hidden = false; $('wlStatus').focus(); wave(); }
   function join() {
     var v = (email.value || '').trim();
@@ -1137,7 +1140,7 @@ var Blorb3D = (function () {
         if (j && j.status === 'quarantined' && /^https:\/\/([a-z0-9-]+\.)*(kit|convertkit)\.com\//.test(j.url || '')) { window.location.href = j.url; return; }
         showErr('that didn’t go through. check the address and try again.');
       })
-      .catch(function () { busy(false); showErr('couldn’t reach the waitlist. check your connection and try again.'); });
+      .catch(function () { busy(false); showErr('couldn’t reach the email list. check your connection and try again.'); });
   }
   joinBtn.addEventListener('click', join);
   email.addEventListener('keydown', function (ev) { if (ev.key === 'Enter') join(); });
