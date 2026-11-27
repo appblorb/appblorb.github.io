@@ -30,7 +30,7 @@
   padding-top: env(safe-area-inset-top, 0px);
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
-/* this is a brand page with its own fixed palette, so dark mode keeps the same colours on purpose */
+/* this is a brand page with its own fixed palette, so dark mode keeps the same colors on purpose */
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --paper: #F2F3F0; --ink: #1E1D1F; } }
 :root[data-theme="dark"] { --paper: #F2F3F0; --ink: #1E1D1F; }
 
@@ -52,12 +52,12 @@ img { max-width: 100%; }
 .skip { position: fixed; left: 12px; top: -80px; z-index: 30; background: var(--ink); color: var(--paper); padding: 10px 16px; border-radius: 999px; text-decoration: none; }
 .skip:focus { top: calc(12px + env(safe-area-inset-top, 0px)); }
 
-/* ---------- fixed layers: page colour < big type & logo < 3D stage < copy < nav ---------- */
+/* ---------- fixed layers: page color < big type & logo < 3D stage < copy < nav ---------- */
 #stage { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; display: block; }
 #doodles { position: fixed; inset: 0; z-index: 3; pointer-events: none; overflow: hidden; }
 .fg { position: relative; z-index: 2; }
 
-/* ---------- the logo: one paint photo, recoloured with a CSS variable ---------- */
+/* ---------- the logo: one paint photo, recolored with a CSS variable ---------- */
 #logo {
   position: fixed; left: 0; top: 0; z-index: 0; display: block; width: 100px; aspect-ratio: 1800 / 747;
   transform-origin: 0 0; will-change: transform; text-decoration: none; -webkit-tap-highlight-color: transparent;
@@ -523,7 +523,7 @@ var Blorb3D = (function () {
     function ekey(a, b) { return a < b ? a * N + b : b * N + a; }
     function ev(a, b) { var k = ekey(a, b); if (edgeV[k] === undefined) { var p = crossing(a, b); edgeV[k] = push(p[0], p[1], WALL, true, p[2], p[3], 0); } return edgeV[k]; }
     function eb(a, b) { var k = ekey(a, b); if (edgeB[k] === undefined) { var p = crossing(a, b); edgeB[k] = push(p[0], p[1], 0, false, 0, 0, -1); } return edgeB[k]; }
-    function ew(a, b) { var k = ekey(a, b); if (edgeW[k] === undefined) { var p = crossing(a, b); edgeW[k] = push(p[0], p[1], 0, true, p[2], p[3], 0); } return edgeW[k]; }   // wall keeps the rim's texel (plain body colour)
+    function ew(a, b) { var k = ekey(a, b); if (edgeW[k] === undefined) { var p = crossing(a, b); edgeW[k] = push(p[0], p[1], 0, true, p[2], p[3], 0); } return edgeW[k]; }   // wall keeps the rim's texel (plain body color)
 
     for (var j = 0; j < ny - 1; j++) {
       for (var i = 0; i < nx - 1; i++) {
@@ -583,7 +583,7 @@ var Blorb3D = (function () {
     return t;
   }
 
-  // where the magnet sits: one 1 inch disc in the belly, at the centre of the
+  // where the magnet sits: one 1 inch disc in the belly, at the center of the
   // biggest circle that fits inside the outline (the NFC tag shares its pocket)
   var MAG_R = 48.3;    // 25.4 mm across, at 114 viewBox units = 30 mm
   function magnetSpots(b, F) {
@@ -611,6 +611,7 @@ var Blorb3D = (function () {
     magnetSpots(b, F).forEach(function (p) {
       var m = new THREE.Mesh(magGeo, magMat);
       m.position.set((p[0] - G.cx) * U, -(p[1] - G.cy) * U, -0.6 * U);
+      m.visible = !!opts.showMagnet;   // the real back is solid, so the magnet stays hidden; kept only to know where it sits
       group.add(m);
     });
 
@@ -784,7 +785,7 @@ var Blorb3D = (function () {
     var s = scenes[k];
     return { k: k, s: s, p: clamp((c - s.top) / s.h, 0, 1), dTop: c - s.top, dBot: s.top + s.h - c };
   }
-  // value at scroll centre c, cross-fading to the neighbouring scene around each boundary
+  // value at scroll center c, cross-fading to the neighboring scene around each boundary
   function blended(L, T, fn, mixer) {
     var v = fn(L.s, L.p);
     if (L.k > 0 && L.dTop < T / 2) return mixer(fn(scenes[L.k - 1], 1), v, smooth(0.5 + L.dTop / T));
@@ -982,7 +983,7 @@ var Blorb3D = (function () {
     if (Math.abs(c - cs) < 0.2) cs = c;
     var L = locate(cs);
 
-    // page colour
+    // page color
     var Lb = locate(cs + vh * 0.12);
     var col = blended(Lb, vh * 0.42, function (s) { return s.bg; }, mixRGB);
     var bg = 'rgb(' + Math.round(col[0]) + ',' + Math.round(col[1]) + ',' + Math.round(col[2]) + ')';
