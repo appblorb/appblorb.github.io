@@ -378,7 +378,7 @@ dialog.drawer::backdrop { background: rgba(30, 29, 31, .38); }
       <div class="panel">
         <h3 id="bh">in the box</h3>
         <ul class="box">
-          <li><span class="ic" id="boxBlorb"></span><span><b id="boxName">pip</b><span>your blorb, magnet and tag already inside</span></span></li>
+          <li><span class="ic" id="boxBlorb"></span><span><b id="boxName">pip</b><span>your blorb, ready to stick somewhere</span></span></li>
           <li><span class="ic"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="5" y="7" width="22" height="18" rx="3"/><path d="M5 9 L16 17 L27 9"/></svg></span><span><b>a hello card</b><span>what a blorb is and how to set it up</span></span></li>
           <li><span class="ic"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="6" y="4" width="20" height="24" rx="3"/><path d="M11 11 H21 M11 16 H21 M11 21 H16"/></svg></span><span><b>its birth certificate</b><span>where it’s from and who it is</span></span></li>
         </ul>
@@ -387,8 +387,7 @@ dialog.drawer::backdrop { background: rgba(30, 29, 31, .38); }
         <h3>the details</h3>
         <dl class="facts">
           <dt>size</dt><dd>under 7 cm tall</dd>
-          <dt>back</dt><dd>flat and solid, with a 1 inch magnet inside</dd>
-          <dt>inside</dt><dd>an NFC tag. no battery, nothing to charge</dd>
+          <dt>colors</dt><dd>black, coral pink, seafoam green, butter yellow, lilac, sky blue</dd>
           <dt>works with</dt><dd>the free <a href="https://apps.apple.com/app/6836228369">blorb app</a> for iPhone</dd>
           <dt>price</dt><dd>$30 USD each. shipping shown at checkout</dd>
         </dl>
@@ -399,7 +398,7 @@ dialog.drawer::backdrop { background: rgba(30, 29, 31, .38); }
       <details><summary>do i need the app?</summary><p>yes. the blorb app is what locks the apps you pick, using apple’s screen time. it’s free on the App Store and has nothing to buy in it. the app also works without a blorb, but then unlocking is a slow press instead of a walk to the fridge.</p></details>
       <details><summary>how much is shipping?</summary><p>you’ll see the shipping cost before you pay, on the checkout page. nothing is charged until you confirm there.</p></details>
       <details><summary>is checkout safe?</summary><p>yes. you pay on a secure checkout page run by our payment provider, so your card number never touches blorb.app and we never see it.</p></details>
-      <details><summary>can i send it back?</summary><p>send back an unused blorb within 30 days of it arriving for a full refund. if it arrives broken or its tag doesn’t work, we’ll replace or refund it, postage included. the details are on the <a href="/refunds/">refunds page</a>.</p></details>
+      <details><summary>can i send it back?</summary><p>send back an unused blorb within 30 days of it arriving for a full refund. if it arrives broken or doesn’t work, we’ll replace or refund it, postage included. the details are on the <a href="/refunds/">refunds page</a>.</p></details>
       <details><summary>something else?</summary><p>write to <a href="mailto:hello@blorb.app">hello@blorb.app</a> and a human will write back.</p></details>
     </div>
   </div>
@@ -443,7 +442,7 @@ dialog.drawer::backdrop { background: rgba(30, 29, 31, .38); }
 
   /* ------------------------------------------------------------------ settings
      The live settings are in shop/config.json, so you can change them on GitHub without touching this page:
-       checkoutUrl  the address of the checkout worker. empty = checkout isn't open yet (bag still works).
+       checkoutUrl  the address of the checkout worker (Cloudflare). checkout uses it to open Stripe's payment page.
        stock        how many of each blorb are left. null = don't show; 0 = sold out; 1 to 5 shows "only N left".
      The price here is only what the page shows. The checkout worker sets what people actually pay. */
   var CFG = { price: 30, checkoutUrl: '', stock: {} };
@@ -625,12 +624,8 @@ dialog.drawer::backdrop { background: rgba(30, 29, 31, .38); }
   function say(html) { var m = $('msg'); m.innerHTML = html; m.hidden = false; }
   coBtn.addEventListener('click', function () {
     if (!bag.length) return;
-    if (!CFG.checkoutUrl) {
-      say('<b>checkout isn’t open yet.</b> blorbs aren’t out yet. your bag will wait here, and if you <a href="/#waitlist">join the waitlist</a> we’ll tell you the minute they are.');
-      return;
-    }
     coBtn.disabled = true; coBtn.textContent = 'opening checkout...'; $('msg').hidden = true;
-    fetch(CFG.checkoutUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ items: bag.map(function (l) { return { blorb: l.b, qty: l.q }; }) }) })
+    (CFG.checkoutUrl ? fetch(CFG.checkoutUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ items: bag.map(function (l) { return { blorb: l.b, qty: l.q }; }) }) }) : Promise.reject(new Error('checkout address missing in shop/config.json')))
       .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok, j: j }; }); })
       .then(function (res) {
         var u = res.j && res.j.url;
@@ -727,8 +722,10 @@ dialog.drawer::backdrop { background: rgba(30, 29, 31, .38); }
 
     function show(name) {
       var gp = build(name);
-      if (cur && cur !== gp) { prev = cur; st.prevT0 = performance.now(); }
-      cur = gp; cur.visible = true; st.t0 = performance.now() + (prev ? 140 : 0);
+      if (cur && cur !== gp && visible) { prev = cur; st.prevT0 = performance.now(); } else prev = null;
+      cur = gp; st.t0 = performance.now() + (prev ? 140 : 0);
+      introWaiting = !visible;     // chosen while scrolled away: play the pop-in when the view comes back
+      hideOthers();
       st.ry = VIEW.front - 0.9; st.goal = VIEW.front; st.vel = 0; st.idle = 0;
       setView('front', true);
       wake();
@@ -761,7 +758,9 @@ dialog.drawer::backdrop { background: rgba(30, 29, 31, .38); }
       dot.setAttribute('cx', at[0]); dot.setAttribute('cy', at[1]);
     }
 
-    var last = 0;
+    var last = 0, introWaiting = false;
+    // only the current blorb (and, during a swap, the one leaving) may ever be drawn
+    function hideOthers() { Object.keys(groups).forEach(function (k) { var g = groups[k]; if (g !== cur && g !== prev) g.visible = false; }); }
     function draw(t) {
       if (!cur) return;
       var dt = Math.min(0.05, (t - (last || t)) / 1000); last = t;
@@ -776,6 +775,7 @@ dialog.drawer::backdrop { background: rgba(30, 29, 31, .38); }
       st.sq *= Math.pow(0.0015, dt);
       var sqv = st.sq * Math.cos((1 - st.sq) * 9);
       var kin = clamp((t - st.t0) / 560, 0, 1), k = reduce ? (kin > 0 ? 1 : 0.001) : Math.max(0.001, backOut(kin));
+      hideOthers();
       cur.visible = t >= st.t0;
       pose(cur, st.ry, k, sqv);
       if (prev) {
@@ -797,7 +797,11 @@ dialog.drawer::backdrop { background: rgba(30, 29, 31, .38); }
       requestAnimationFrame(frame);
     }
     function wake() { if (!running) { running = true; last = 0; requestAnimationFrame(frame); } }
-    if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { visible = es[0].isIntersecting; if (visible) wake(); }).observe(box);
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (es) {
+      visible = es[0].isIntersecting;
+      if (visible && introWaiting) { introWaiting = false; prev = null; st.t0 = performance.now() + 150; st.ry = VIEW.front - 0.9; st.goal = VIEW.front; st.vel = 0; }
+      if (visible) wake();
+    }).observe(box);
     document.addEventListener('visibilitychange', function () { if (!document.hidden) wake(); });
     window.addEventListener('resize', function () { resize(false); });
 
