@@ -4,75 +4,895 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
-<meta name="theme-color" content="#1E1D1F">
-<meta name="robots" content="noindex">
-<title>thank you · blorbs</title>
+<meta name="theme-color" content="#F2F3F0">
+<title>get a blorb · blorbs</title>
+<meta name="description" content="pick your blorb. a small magnetic buddy that locks your distracting apps until you get up and tap it. $30 USD.">
+<link rel="canonical" href="https://blorb.app/shop/">
+<meta property="og:type" content="product">
+<meta property="og:url" content="https://blorb.app/shop/">
+<meta property="og:title" content="get a blorb · blorbs">
+<meta property="og:description" content="six blorbs, six personalities. a small magnetic buddy that locks your distracting apps until you get up and tap it.">
 <link rel="icon" href="/favicon.ico">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800;900&display=swap">
 <style>
-:root { --paper: #F2F3F0; --ink: #1E1D1F; --cream: #F3EFE6; --pad: clamp(20px, 4vw, 56px);
-  --font: 'M PLUS Rounded 1c', 'Hiragino Maru Gothic ProN', 'Arial Rounded MT Bold', 'Nunito', system-ui, sans-serif; }
+:root {
+  --paper: #F2F3F0; --ink: #1E1D1F; --cream: #F3EFE6; --grey: #55525A; --line: #DCDCD6;
+  --coral: #FF7F6E; --tint: #FFC3BA; --body: #FF7F6E;
+  --font: 'M PLUS Rounded 1c', 'Hiragino Maru Gothic ProN', 'Arial Rounded MT Bold', 'Nunito', system-ui, sans-serif;
+  --pad: clamp(20px, 4vw, 56px);
+  color-scheme: light;
+}
 *, *::before, *::after { box-sizing: border-box; }
-body { margin: 0; min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; background: var(--ink); color: var(--cream);
-  font-family: var(--font); font-weight: 500; font-size: clamp(16px, 1.25vw, 19px); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--paper); color: var(--ink); font-family: var(--font); font-weight: 500;
+  font-size: clamp(16px, 1.2vw, 19px); line-height: 1.5; -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+h1, h2, h3, p { margin: 0; }
+h1, h2, h3 { font-weight: 900; letter-spacing: -0.02em; line-height: 1; text-wrap: balance; }
+p { text-wrap: pretty; }
 a { color: inherit; }
-.logo { position: relative; display: block; width: 96px; aspect-ratio: 1800 / 747; margin: calc(16px + env(safe-area-inset-top, 0px)) var(--pad) 0; }
-.logo .fill { position: absolute; inset: 0; background: var(--cream);
+button { font: inherit; color: inherit; }
+img { max-width: 100%; display: block; }
+:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; border-radius: 10px; }
+.wrap { width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 var(--pad); }
+[hidden] { display: none !important; }
+.box .ic .dot { width: 30px; height: 30px; border-radius: 50%; background: var(--c); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------- buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 56px; padding: 10px 28px; border: 0; cursor: pointer;
+  background: var(--ink); color: var(--paper); border-radius: 999px; font-weight: 800; font-size: 1.02em; line-height: 1.1; text-decoration: none;
+  transition: transform .18s cubic-bezier(.3, 1.6, .5, 1), background-color .3s ease, color .3s ease;
+}
+.btn:hover { transform: scale(1.04) rotate(-1.2deg); }
+.btn:active { transform: scale(.96); }
+.btn:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+.btn.ghost { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 3px var(--ink); }
+.btn.cream { background: var(--cream); color: var(--ink); }
+.btn .arrow { width: 18px; height: 18px; flex: none; }
+
+/* ---------- top bar ---------- */
+.top { position: sticky; top: 0; z-index: 20; background: rgba(242, 243, 240, .88); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-top: calc(12px + env(safe-area-inset-top, 0px)); padding-bottom: 12px; }
+.logo { position: relative; display: block; width: 96px; aspect-ratio: 1800 / 747; flex: none; }
+.logo .fill { position: absolute; inset: 0; background: var(--ink);
   -webkit-mask: url("/assets/logo-mask.webp") center / 100% 100% no-repeat; mask: url("/assets/logo-mask.webp") center / 100% 100% no-repeat; }
-main { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px var(--pad) 60px; }
-#gang { width: min(720px, 100%); aspect-ratio: 3 / 1; display: block; }
-h1 { margin: .3em 0 0; font-weight: 900; font-size: clamp(52px, 8vw, 120px); line-height: .95; letter-spacing: -0.03em; }
-p { margin: 1em auto 0; max-width: 28em; font-size: 1.1em; }
-.small { font-size: .9em; color: #B7B4BD; }
-.btn { display: inline-flex; align-items: center; min-height: 54px; margin-top: 1.8em; padding: 10px 28px; border-radius: 999px; background: var(--cream); color: var(--ink); font-weight: 800; text-decoration: none; }
+.logo .ov { position: absolute; inset: 0; width: 100%; height: 100%; }
+.top nav { display: flex; gap: clamp(14px, 2.4vw, 34px); font-weight: 700; }
+.top nav a { text-decoration: none; padding: 10px 2px; }
+.top nav a:hover { text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 6px; }
+.bagbtn {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 46px; padding: 6px 18px 6px 14px; border-radius: 999px; border: 3px solid var(--ink);
+  background: transparent; font-weight: 800; cursor: pointer; transition: transform .18s cubic-bezier(.3, 1.6, .5, 1), background-color .2s ease;
+}
+.bagbtn:hover { background: #FFFFFF; }
+.bagbtn svg { width: 22px; height: 22px; }
+.bagbtn.hop { animation: hop .5s cubic-bezier(.3, 1.6, .5, 1); }
+@keyframes hop { 0% { transform: scale(1); } 35% { transform: scale(1.14) rotate(-4deg); } 100% { transform: scale(1); } }
+
+/* ---------- product hero ---------- */
+.hero { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(28px, 4.5vw, 72px); align-items: start; padding-top: clamp(14px, 3vh, 34px); padding-bottom: clamp(56px, 10vh, 110px); }
+.info { padding-top: clamp(6px, 3vh, 40px); }
+.pill { display: inline-block; padding: 5px 16px; border-radius: 999px; border: 2px solid var(--ink); font-weight: 800; font-size: .82em; }
+.pname { margin-top: .18em; font-size: clamp(84px, 9.6vw, 158px); line-height: .84; letter-spacing: -0.05em; padding-bottom: .16em; }
+.pline { margin-top: .35em; font-weight: 800; font-size: 1.22em; line-height: 1.25; max-width: 22em; min-height: 2.5em; }
+.lede { margin-top: .6em; max-width: 26em; color: var(--grey); }
+
+.pick { margin-top: clamp(22px, 3.4vh, 34px); }
+.pick .lab { display: flex; gap: 8px; align-items: baseline; font-size: .86em; }
+.pick .lab span { font-weight: 800; }
+.swatches { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 12px; }
+.sw {
+  position: relative; width: 58px; height: 58px; padding: 0; border: 0; border-radius: 50%; cursor: pointer; background: var(--t);
+  display: grid; place-items: center; transition: transform .18s cubic-bezier(.3, 1.6, .5, 1), box-shadow .2s ease;
+}
+.sw:hover { transform: translateY(-3px) rotate(-4deg); }
+.sw[aria-checked="true"] { box-shadow: 0 0 0 3px var(--paper), 0 0 0 6px var(--ink); }
+.sw img { width: 46px; height: 46px; object-fit: contain; }
+.sw .dot { width: 30px; height: 30px; border-radius: 50%; background: var(--c); }
+.sw.out::after { content: ''; position: absolute; left: 6px; right: 6px; top: 50%; height: 3px; border-radius: 3px; background: var(--ink); transform: rotate(-35deg); }
+
+.buy { margin-top: clamp(22px, 3.4vh, 34px); display: flex; flex-wrap: wrap; align-items: center; gap: 14px 18px; }
+.qty { display: inline-flex; align-items: center; height: 56px; border-radius: 999px; box-shadow: inset 0 0 0 3px var(--ink); }
+.qty button { width: 50px; height: 56px; border: 0; background: none; cursor: pointer; font-weight: 900; font-size: 1.3em; line-height: 1; border-radius: 999px; }
+.qty button:disabled { opacity: .3; cursor: default; }
+.qty output { min-width: 1.6em; text-align: center; font-weight: 900; font-variant-numeric: tabular-nums; }
+.price { font-weight: 900; font-size: 1.7em; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.price small { font-size: .5em; font-weight: 700; letter-spacing: 0; margin-left: 4px; color: var(--grey); }
+.stock { margin-top: 12px; font-weight: 800; font-size: .92em; }
+.stock[hidden] { display: none; }
+
+.views { margin-top: clamp(22px, 3.4vh, 34px); display: flex; gap: 12px; }
+.view { padding: 0; border: 0; background: none; cursor: pointer; text-align: center; font-size: .8em; font-weight: 700; }
+.view .im { width: 92px; height: 78px; border-radius: 18px; background: #FFFFFF; display: grid; place-items: center; box-shadow: inset 0 0 0 3px transparent; transition: box-shadow .2s ease, transform .18s cubic-bezier(.3, 1.6, .5, 1); overflow: hidden; }
+.view img { width: 74px; height: 74px; object-fit: contain; }
+.view:hover .im { transform: translateY(-2px); }
+.view[aria-pressed="true"] .im { box-shadow: inset 0 0 0 3px var(--ink); }
+.view span { display: block; margin-top: 4px; }
+
+.perks { list-style: none; margin: clamp(22px, 3.4vh, 34px) 0 0; padding: 0; display: grid; gap: 8px; font-size: .92em; }
+.perks li { display: flex; gap: 10px; align-items: flex-start; }
+.perks svg { width: 22px; height: 22px; flex: none; margin-top: 1px; }
+.perks path { fill: none; stroke: var(--ink); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+
+/* the 3D box: a little fridge door the blorb is stuck to */
+.stagebox {
+  position: sticky; top: 90px; height: min(calc(100vh - 120px), 52vw, 820px); min-height: 380px; border-radius: clamp(28px, 3vw, 44px); background: var(--tint);
+  overflow: hidden; touch-action: pan-y; cursor: grab; transition: background-color .55s ease; -webkit-user-select: none; user-select: none;
+}
+.stagebox.drag { cursor: grabbing; }
+#view { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.co-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+.co-svg path { fill: none; stroke: var(--ink); stroke-width: 2.5; stroke-linecap: round; }
+.co-svg circle { fill: var(--paper); stroke: var(--ink); stroke-width: 2.5; }
+.co { position: absolute; left: 0; top: 0; font-size: 14px; font-weight: 800; line-height: 1.2; pointer-events: none; opacity: 0; white-space: nowrap; }
+.co small { display: block; font-weight: 500; font-size: 13px; }
+.hint { position: absolute; left: 22px; bottom: 18px; font-size: 13px; font-weight: 800; opacity: .75; pointer-events: none; transition: opacity .3s ease; }
+.boop { position: absolute; left: 50%; top: 18px; transform: translate(-50%, -8px); padding: 8px 16px; border-radius: 999px; background: var(--ink); color: var(--paper); font-weight: 800; font-size: 14px; opacity: 0; transition: opacity .25s ease, transform .3s cubic-bezier(.3, 1.6, .5, 1); pointer-events: none; white-space: nowrap; }
+.boop.on { opacity: 1; transform: translate(-50%, 0); }
+.ring { position: absolute; left: 0; top: 0; width: 76px; height: 76px; margin: -38px 0 0 -38px; border-radius: 50%; border: 4px solid var(--ink); opacity: 0; pointer-events: none; }
+.ring.go { animation: ring .75s ease-out; }
+@keyframes ring { from { opacity: .9; transform: scale(.35); } to { opacity: 0; transform: scale(1.7); } }
+.nogl { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; padding: 30px; }
+.nogl .blob { width: 46%; aspect-ratio: 1; border-radius: 48% 52% 44% 56% / 58% 56% 44% 42%; background: var(--body); }
+
+/* ---------- details ---------- */
+.sec { padding: clamp(56px, 10vh, 110px) 0; }
+.sechead { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 18px 30px; }
+.kicker { display: block; font-size: .78em; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 14px; }
+.sechead h2 { font-size: clamp(38px, 4.6vw, 72px); max-width: 13em; }
+.sechead p { max-width: 22em; color: var(--grey); }
+.cards { margin-top: clamp(26px, 4vh, 44px); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(16px, 2.2vw, 28px); }
+.card .im { position: relative; aspect-ratio: 5 / 4; border-radius: clamp(24px, 2.6vw, 38px); background: var(--tint); overflow: hidden; display: grid; place-items: center; transition: background-color .55s ease; }
+.card .im img { width: 78%; height: 78%; object-fit: contain; }
+.card h3 { margin-top: 18px; font-size: clamp(24px, 2.2vw, 34px); }
+.card p { margin-top: 6px; max-width: 30em; }
+.card a { display: inline-block; margin-top: 10px; font-weight: 800; text-underline-offset: 5px; text-decoration-thickness: 2px; }
+.pulse { position: absolute; width: 16%; aspect-ratio: 1; margin: -8% 0 0 -8%; border-radius: 50%; border: 4px solid var(--ink); animation: pulse 2.2s ease-out infinite; opacity: 0; }
+.pulse.b { animation-delay: .45s; }
+@keyframes pulse { 0% { opacity: .9; transform: scale(.3); } 70%, 100% { opacity: 0; transform: scale(1.5); } }
+
+/* the gang */
+.gang { margin-top: clamp(26px, 4vh, 44px); display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: clamp(10px, 1.6vw, 22px); }
+.mate { display: block; align-self: start; padding: 0; border: 0; background: none; cursor: pointer; text-align: center; }
+.mate .im { aspect-ratio: 1; border-radius: 50%; background: var(--t); display: grid; place-items: center; transition: transform .22s cubic-bezier(.3, 1.6, .5, 1), box-shadow .2s ease; }
+.mate img { width: 78%; height: 78%; object-fit: contain; }
+.mate .dot { width: 50%; aspect-ratio: 1; border-radius: 50%; background: var(--c); }
+.mate:hover .im { transform: translateY(-6px) rotate(-5deg); }
+.mate[aria-current="true"] .im { box-shadow: 0 0 0 3px var(--paper), 0 0 0 6px var(--ink); }
+.mate b { display: block; margin-top: 12px; font-weight: 900; font-size: 1.25em; }
+.mate span { display: block; font-size: .86em; color: var(--grey); }
+
+/* in the box + facts */
+.duo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(16px, 2.2vw, 28px); margin-top: clamp(26px, 4vh, 44px); }
+.panel { background: #FFFFFF; border-radius: clamp(24px, 2.6vw, 38px); padding: clamp(22px, 3vw, 40px); }
+.panel h3 { font-size: clamp(26px, 2.4vw, 38px); }
+.box { list-style: none; margin: 1.1em 0 0; padding: 0; display: grid; gap: 14px; }
+.box li { display: grid; grid-template-columns: 54px 1fr; gap: 14px; align-items: center; }
+.box .ic { width: 54px; height: 54px; border-radius: 16px; background: var(--paper); display: grid; place-items: center; }
+.box .ic img { width: 42px; height: 42px; object-fit: contain; }
+.box .ic svg { width: 32px; height: 32px; }
+.box .ic path, .box .ic rect { fill: none; stroke: var(--ink); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.box b { display: block; font-weight: 800; color: var(--ink); }
+.box li > span + span > span { font-size: .9em; color: var(--grey); }
+.facts { margin: 1.1em 0 0; display: grid; grid-template-columns: max-content 1fr; gap: 12px 22px; }
+.facts dt { font-weight: 800; }
+.facts dd { margin: 0; }
+.faq { margin-top: clamp(26px, 4vh, 44px); display: grid; gap: 10px; max-width: 900px; }
+.faq details { background: #FFFFFF; border-radius: 22px; padding: 0 24px; }
+.faq summary { list-style: none; cursor: pointer; padding: 18px 0; font-weight: 800; font-size: 1.08em; display: flex; justify-content: space-between; gap: 16px; align-items: center; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: '+'; font-weight: 900; font-size: 1.4em; line-height: 1; transition: transform .25s ease; }
+.faq details[open] summary::after { transform: rotate(45deg); }
+.faq details p { padding: 0 0 20px; max-width: 40em; }
+
+/* closing band */
+.band { background: var(--ink); color: var(--cream); padding: clamp(70px, 13vh, 140px) 0 0; }
+.band .mid { text-align: center; padding-bottom: clamp(70px, 13vh, 140px); }
+.band h2 { font-size: clamp(46px, 7vw, 112px); }
+.band p { margin: .9em auto 0; max-width: 26em; font-size: 1.1em; }
+.band .btn { margin-top: 1.6em; }
 .foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; padding: 22px var(--pad) calc(26px + env(safe-area-inset-bottom, 0px)); font-size: .9em; font-weight: 700; }
+.foot a { text-underline-offset: 4px; }
+
+/* ---------- the bag drawer ---------- */
+dialog.drawer {
+  position: fixed; inset: 0 0 0 auto; margin: 0; width: min(440px, 100%); height: 100%; max-height: 100%; max-width: 100%; border: 0; padding: 0;
+  background: var(--paper); color: var(--ink); box-shadow: -20px 0 60px rgba(30, 29, 31, .18);
+}
+dialog.drawer[open] { display: flex; flex-direction: column; animation: slide .38s cubic-bezier(.2, .9, .3, 1); }
+dialog.drawer::backdrop { background: rgba(30, 29, 31, .38); }
+@keyframes slide { from { transform: translateX(100%); } to { transform: none; } }
+.dhead { display: flex; align-items: center; justify-content: space-between; padding: calc(20px + env(safe-area-inset-top, 0px)) 24px 14px; }
+.dhead h2 { font-size: 34px; }
+.x { width: 48px; height: 48px; border-radius: 50%; border: 0; background: #FFFFFF; cursor: pointer; display: grid; place-items: center; }
+.x svg { width: 20px; height: 20px; }
+.x path { stroke: var(--ink); stroke-width: 3; stroke-linecap: round; }
+.lines { list-style: none; margin: 0; padding: 6px 24px; flex: 1; overflow: auto; display: grid; gap: 12px; align-content: start; }
+.ln { display: grid; grid-template-columns: 74px 1fr auto; gap: 14px; align-items: center; background: #FFFFFF; border-radius: 22px; padding: 10px 14px 10px 10px; }
+.ln .im { width: 74px; height: 74px; border-radius: 18px; background: var(--t); display: grid; place-items: center; }
+.ln .im img { width: 60px; height: 60px; object-fit: contain; }
+.ln .im .dot { width: 40px; height: 40px; border-radius: 50%; background: var(--c); }
+.ln b { display: block; font-weight: 900; font-size: 1.15em; line-height: 1.1; }
+.ln .col { display: block; font-size: .84em; color: var(--grey); }
+.ln .qty { height: 40px; margin-top: 8px; box-shadow: inset 0 0 0 2.5px var(--ink); }
+.ln .qty button { width: 38px; height: 40px; font-size: 1.1em; }
+.ln .end { text-align: right; display: grid; gap: 8px; justify-items: end; }
+.ln .lp { font-weight: 900; font-variant-numeric: tabular-nums; }
+.rm { border: 0; background: none; padding: 4px 2px; cursor: pointer; font-size: .82em; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; color: var(--grey); }
+.empty { padding: 30px 24px; text-align: center; }
+.empty p { font-weight: 800; font-size: 1.15em; }
+.empty .btn { margin-top: 18px; }
+.dfoot { padding: 16px 24px calc(22px + env(safe-area-inset-bottom, 0px)); border-top: 2px solid var(--line); }
+.sub { display: flex; justify-content: space-between; align-items: baseline; font-weight: 900; font-size: 1.3em; }
+.dfoot .note { margin-top: 4px; font-size: .86em; color: var(--grey); }
+.dfoot .btn { width: 100%; margin-top: 16px; }
+.safe { margin-top: 12px; display: flex; gap: 8px; align-items: flex-start; font-size: .82em; color: var(--grey); }
+.safe svg { width: 18px; height: 18px; flex: none; margin-top: 2px; }
+.safe path, .safe rect { fill: none; stroke: var(--grey); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.msg { margin-top: 12px; padding: 14px 16px; border-radius: 18px; background: #FFFFFF; font-size: .92em; }
+.msg[hidden] { display: none; }
+.msg b { font-weight: 800; }
+
+/* ---------- narrow screens ---------- */
+@media (max-width: 900px) {
+  .top nav { display: none; }
+  .logo { width: 84px; }
+  .hero { grid-template-columns: 1fr; gap: 24px; padding-top: 6px; }
+  .stagebox { position: relative; top: 0; order: -1; height: min(calc(100vw - 2 * var(--pad)), 58vh); min-height: 300px; }
+  .info { padding-top: 0; }
+  .pname { font-size: clamp(76px, 22vw, 130px); }
+  .cards, .duo { grid-template-columns: 1fr; }
+  .gang { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 26px; }
+  .co { font-size: 12.5px; }
+  .co small { font-size: 12px; }
+}
+@media (max-width: 420px) {
+  .view .im { width: 84px; height: 72px; }
+  .swatches { gap: 9px; }
+  .sw { width: 47px; height: 47px; }
+  .sw img { width: 38px; height: 38px; }
+  .facts { grid-template-columns: 1fr; gap: 2px; }
+  .facts dd { margin-bottom: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .btn, .sw, .mate .im, .bagbtn, .view .im { transition: none; }
+  .pulse, .bagbtn.hop, dialog.drawer[open] { animation: none; }
+  .pulse { opacity: .6; }
+}
 </style>
 </head>
 <body>
-<a class="logo" href="/" aria-label="blorb home"><span class="fill"></span></a>
-<main>
-  <canvas id="gang" aria-hidden="true"></canvas>
-  <h1>thank you!</h1>
-  <p>your order’s in, and your blorb is getting ready to leave home. your receipt is on its way to your inbox.</p>
-  <p class="small">questions about your order? write to <a href="mailto:hello@blorb.app">hello@blorb.app</a>.</p>
-  <a class="btn" href="https://apps.apple.com/app/6836228369">get the app while you wait</a>
-</main>
-<footer class="foot"><span>blorbs · 2026</span><span><a href="/privacy/">privacy</a> · <a href="/terms/">terms</a> · <a href="/refunds/">refunds</a> · <a href="/support/">help</a></span><span>made for being somewhere else.</span></footer>
 
-<script>
-  // the order is paid, so the bag on this browser can be emptied
-  try { localStorage.removeItem('blorb-bag'); } catch (e) {}
-</script>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <filter id="boil" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="1" seed="3" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="4" xChannelSelector="R" yChannelSelector="G"/></filter>
+</defs></svg>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="/" aria-label="blorb home"><span class="fill"></span><img class="ov" src="/assets/logo-paint.webp" alt=""></a>
+    <nav aria-label="main">
+      <a href="/#meet">the blorbs</a>
+      <a href="/#how">how it works</a>
+      <a href="/support/">help</a>
+    </nav>
+    <button class="bagbtn" id="bagBtn" type="button" aria-haspopup="dialog">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 8.5h13l-1 11.5h-11z M9 8.5V7a3 3 0 0 1 6 0v1.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>bag (<span id="bagCount">0</span>)</span>
+    </button>
+  </div>
+</header>
+
+<main>
+<section class="wrap hero" aria-labelledby="pname">
+  <div class="info">
+    <span class="pill">pick your blorb</span>
+    <h1 class="pname" id="pname">pip</h1>
+    <p class="pline" id="pline">the hype one. tall, tilted head, biggest grin.</p>
+    <p class="lede">a small magnetic buddy that locks your distracting apps until you get up and tap it.</p>
+
+    <div class="pick">
+      <div class="lab" id="swLab">color <span id="colName">coral pink</span></div>
+      <div class="swatches" id="swatches" role="radiogroup" aria-labelledby="swLab"></div>
+    </div>
+
+    <div class="buy">
+      <div class="qty" role="group" aria-label="how many">
+        <button type="button" id="qMinus" aria-label="one fewer">−</button>
+        <output id="qOut" aria-live="polite">1</output>
+        <button type="button" id="qPlus" aria-label="one more">+</button>
+      </div>
+      <button class="btn" type="button" id="addBtn"><span>add <span id="addName">pip</span> to bag</span></button>
+      <span class="price" id="price">$30<small>USD</small></span>
+    </div>
+    <p class="stock" id="stock" hidden></p>
+
+    <div class="views" role="group" aria-label="views">
+      <button class="view" type="button" data-view="front" aria-pressed="true"><span class="im"><img alt="" data-v="front"></span><span>front</span></button>
+      <button class="view" type="button" data-view="side" aria-pressed="false"><span class="im"><img alt="" data-v="side"></span><span>side</span></button>
+      <button class="view" type="button" data-view="back" aria-pressed="false"><span class="im"><img alt="" data-v="back"></span><span>back</span></button>
+    </div>
+
+    <ul class="perks">
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5 L9.5 18 L20 6.5"/></svg><span>works with the free <a href="https://apps.apple.com/app/6836228369">blorb app for iPhone</a></span></li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5 L9.5 18 L20 6.5"/></svg><span>no battery, nothing to charge</span></li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5 L9.5 18 L20 6.5"/></svg><span>send it back unused within 30 days. <a href="/refunds/">refunds</a></span></li>
+    </ul>
+  </div>
+
+  <div class="stagebox" id="stagebox">
+    <canvas id="view" aria-label="3D view of pip. drag to spin it, tap its belly." role="img"></canvas>
+    <svg class="co-svg" id="coSvg" aria-hidden="true">
+      <g class="boilg" filter="url(#boil)"><path id="coPathA"/><path id="coPathB"/></g>
+      <circle id="coDotA" r="6"/><circle id="coDotB" r="6"/>
+    </svg>
+    <div class="co" id="coA" aria-hidden="true">tap the belly<small>to start or end a lock</small></div>
+    <div class="co" id="coB" aria-hidden="true">1 inch magnet<small>hidden inside the back</small></div>
+    <div class="ring" id="ring" aria-hidden="true"></div>
+    <div class="boop" id="boop" role="status" aria-live="polite"></div>
+    <div class="hint" id="hint" aria-hidden="true">drag to spin · tap the belly</div>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="dh">
+  <div class="wrap">
+    <div class="sechead">
+      <div><span class="kicker">a closer look</span><h2 id="dh">small, lumpy, very good at its job.</h2></div>
+      <p>no screen, no battery, no notifications. just a buddy on the fridge that’s a short walk away.</p>
+    </div>
+    <div class="cards">
+      <article class="card">
+        <div class="im"><img alt="" id="imgBack"></div>
+        <h3>a magnet hidden in its back</h3>
+        <p>a smooth, solid back with a 1 inch magnet hidden inside, so it holds on to the fridge, the front door, or anything else steel. somewhere you’d have to get up for.</p>
+      </article>
+      <article class="card">
+        <div class="im"><img alt="" id="imgFront"><span class="pulse" id="pulseA"></span><span class="pulse b" id="pulseB"></span></div>
+        <h3>a tap in its belly</h3>
+        <p>tap your iPhone to the belly to start a blorb lock, and again to end it. you can also start one from the app.</p>
+        <a href="/#how">how it works</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="gh" style="padding-top: 0">
+  <div class="wrap">
+    <div class="sechead">
+      <div><span class="kicker">the whole gang</span><h2 id="gh">six blorbs, six personalities.</h2></div>
+      <p>same job, different vibe. pick the one that gets you, or one for everyone in your family space.</p>
+    </div>
+    <div class="gang" id="gang"></div>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="bh" style="padding-top: 0">
+  <div class="wrap">
+    <div class="duo">
+      <div class="panel">
+        <h3 id="bh">in the box</h3>
+        <ul class="box">
+          <li><span class="ic" id="boxBlorb"></span><span><b id="boxName">pip</b><span>your blorb, magnet and tag already inside</span></span></li>
+          <li><span class="ic"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="5" y="7" width="22" height="18" rx="3"/><path d="M5 9 L16 17 L27 9"/></svg></span><span><b>a hello card</b><span>what a blorb is and how to set it up</span></span></li>
+          <li><span class="ic"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="6" y="4" width="20" height="24" rx="3"/><path d="M11 11 H21 M11 16 H21 M11 21 H16"/></svg></span><span><b>its birth certificate</b><span>where it’s from and who it is</span></span></li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>the details</h3>
+        <dl class="facts">
+          <dt>size</dt><dd>under 7 cm tall</dd>
+          <dt>back</dt><dd>flat and solid, with a 1 inch magnet inside</dd>
+          <dt>inside</dt><dd>an NFC tag. no battery, nothing to charge</dd>
+          <dt>works with</dt><dd>the free <a href="https://apps.apple.com/app/6836228369">blorb app</a> for iPhone</dd>
+          <dt>price</dt><dd>$30 USD each. shipping shown at checkout</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="faq">
+      <details><summary>do i need the app?</summary><p>yes. the blorb app is what locks the apps you pick, using apple’s screen time. it’s free on the App Store and has nothing to buy in it. the app also works without a blorb, but then unlocking is a slow press instead of a walk to the fridge.</p></details>
+      <details><summary>how much is shipping?</summary><p>you’ll see the shipping cost before you pay, on the checkout page. nothing is charged until you confirm there.</p></details>
+      <details><summary>is checkout safe?</summary><p>yes. you pay on a secure checkout page run by our payment provider, so your card number never touches blorb.app and we never see it.</p></details>
+      <details><summary>can i send it back?</summary><p>send back an unused blorb within 30 days of it arriving for a full refund. if it arrives broken or its tag doesn’t work, we’ll replace or refund it, postage included. the details are on the <a href="/refunds/">refunds page</a>.</p></details>
+      <details><summary>something else?</summary><p>write to <a href="mailto:hello@blorb.app">hello@blorb.app</a> and a human will write back.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="band" aria-labelledby="endh">
+  <div class="wrap mid">
+    <h2 id="endh">made for being somewhere else.</h2>
+    <p><span id="endName">pip</span> is ready when you are.</p>
+    <button class="btn cream" type="button" id="addBtn2"><span>add <span id="addName2">pip</span> to bag · <span id="price2">$30</span></span></button>
+  </div>
+  <footer class="foot"><span>blorbs · 2026</span><span><a href="/privacy/">privacy</a> · <a href="/terms/">terms</a> · <a href="/refunds/">refunds</a> · <a href="/support/">help</a></span><span>made for being somewhere else.</span></footer>
+</section>
+</main>
+
+<dialog class="drawer" id="bag" aria-labelledby="bagH">
+  <div class="dhead">
+    <h2 id="bagH">your bag</h2>
+    <button class="x" type="button" id="bagClose" aria-label="close bag"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 4 L16 16 M16 4 L4 16"/></svg></button>
+  </div>
+  <ul class="lines" id="lines"></ul>
+  <div class="empty" id="empty" hidden>
+    <p>your bag is empty.</p>
+    <span>a blorb would love to fix that.</span><br>
+    <button class="btn" type="button" id="emptyBtn">pick a blorb</button>
+  </div>
+  <div class="dfoot" id="dfoot">
+    <div class="sub"><span>subtotal</span><span id="subtotal">$0</span></div>
+    <p class="note">shipping and any tax are added at checkout.</p>
+    <button class="btn" type="button" id="checkout">checkout <svg class="arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10 H16 M11 5 L16 10 L11 15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <p class="safe"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="4" y="9" width="12" height="8.5" rx="2"/><path d="M6.5 9 V6.5 a3.5 3.5 0 0 1 7 0 V9"/></svg><span>you’ll pay on a secure checkout page. your card details never touch this site.</span></p>
+    <div class="msg" id="msg" role="status" hidden></div>
+  </div>
+</dialog>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="/assets/blorbs.js"></script>
 <script>
 (function () {
-  // all six blorbs in a row, rendered once (no animation loop)
-  var c = document.getElementById('gang');
-  if (!window.THREE || !window.Blorb3D || !window.BLORBS) { c.hidden = true; return; }
-  var R;
-  try { R = new THREE.WebGLRenderer({ canvas: c, antialias: true, alpha: true }); } catch (e) { c.hidden = true; return; }
-  function draw() {
-    var w = c.clientWidth, h = c.clientHeight;
-    R.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2)); R.setSize(w, h, false); R.outputEncoding = THREE.sRGBEncoding;
-    var scene = new THREE.Scene(), n = BLORBS.length, span = 2.35, aspect = w / h, halfW = n * span / 2, halfH = halfW / aspect;
-    var cam = new THREE.OrthographicCamera(-halfW, halfW, halfH, -halfH, 0.1, 60); cam.position.set(0, 0, 20);
-    scene.add(new THREE.HemisphereLight(0xffffff, 0xcfcbc4, 0.9));
-    var key = new THREE.DirectionalLight(0xffffff, 0.7); key.position.set(-5, 7, 9); scene.add(key);
-    var mag = new THREE.MeshStandardMaterial({ color: 0xcfd2d6, metalness: 1, roughness: 0.3 });
-    var tilt = [-0.25, 0.15, -0.1, 0.25, -0.2, 0.1];
-    BLORBS.forEach(function (b, i) {
-      var g = Blorb3D.build(b, { magnetMaterial: mag, roughness: 0.55 }), u = g.userData, s = 2.0 / Math.max(u.width, u.height);
-      g.scale.setScalar(s); g.rotation.set(0, tilt[i], 0);
-      g.position.set(-halfW + span * (i + 0.5), -halfH + 0.25 + u.height * s / 2, 0);   // standing on one shared floor
-      scene.add(g);
-    });
-    R.render(scene, cam);
+  'use strict';
+
+  /* ------------------------------------------------------------------ settings
+     The live settings are in shop/config.json, so you can change them on GitHub without touching this page:
+       checkoutUrl  the address of the checkout worker. empty = checkout isn't open yet (bag still works).
+       stock        how many of each blorb are left. null = don't show; 0 = sold out; 1 to 5 shows "only N left".
+     The price here is only what the page shows. The checkout worker sets what people actually pay. */
+  var CFG = { price: 30, checkoutUrl: '', stock: {} };
+  var TINT = { soot: '#D9D8DC', pip: '#FFC3BA', dew: '#CDEFE3', bean: '#FBEBAF', mim: '#DFD5F6', glub: '#C3DEF9' };
+  var MAXQ = 9, BAGKEY = 'blorb-bag';
+
+  var $ = function (id) { return document.getElementById(id); };
+  var BL = window.BLORBS || [], byName = {};
+  BL.forEach(function (b, i) { b.i = i; byName[b.name] = b; });
+  var reduce = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  function clamp(x, a, b) { return x < a ? a : x > b ? b : x; }
+  function money(n) { return '$' + (Math.round(n * 100) % 100 ? n.toFixed(2) : String(Math.round(n))); }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+  // ------------------------------------------------------------------ which blorb
+  function fromUrl() {
+    var m = /[?&]b=([a-z]+)/.exec(location.search) || /^#([a-z]+)$/.exec(location.hash);
+    return m && byName[m[1]] ? m[1] : null;
   }
-  var go = function () { draw(); };
-  if (document.fonts && document.fonts.ready) Promise.race([document.fonts.ready, new Promise(function (r) { setTimeout(r, 1000); })]).then(go); else go();
+  var sel = fromUrl() || 'pip', qty = 1;
+
+  // ------------------------------------------------------------------ stock
+  function left(name) { var v = CFG.stock[name]; return typeof v === 'number' && v >= 0 ? Math.floor(v) : null; }
+  function inBag(name) { for (var i = 0; i < bag.length; i++) if (bag[i].b === name) return bag[i].q; return 0; }
+  function canHave(name) { var l = left(name); return l === null ? MAXQ : Math.min(MAXQ, l); }
+
+  // ------------------------------------------------------------------ bag (kept in this browser only)
+  var bag = (function () {
+    try {
+      var v = JSON.parse(localStorage.getItem(BAGKEY) || '[]');
+      return Array.isArray(v) ? v.filter(function (l) { return l && byName[l.b] && l.q > 0; }).map(function (l) { return { b: l.b, q: Math.min(MAXQ, l.q | 0) }; }) : [];
+    } catch (e) { return []; }
+  })();
+  function saveBag() { try { localStorage.setItem(BAGKEY, JSON.stringify(bag)); } catch (e) {} }
+  function bagTotal() { return bag.reduce(function (n, l) { return n + l.q; }, 0); }
+  function setLine(name, q) {
+    q = clamp(q, 0, canHave(name));
+    var found = false;
+    bag = bag.filter(function (l) { if (l.b === name) { found = true; l.q = q; } return l.q > 0; });
+    if (!found && q > 0) bag.push({ b: name, q: q });
+    saveBag(); renderBag(); renderBuy();
+  }
+
+  // ------------------------------------------------------------------ images rendered from the 3D blorbs
+  var stills = {};          // stills[name] = { front, side, back, sprite, belly: [x%, y%] }
+  function imgFor(name, kind) { return stills[name] && stills[name][kind]; }
+  function blorbIcon(name, cls) {
+    var b = byName[name], u = imgFor(name, 'sprite');
+    return u ? '<img alt="" src="' + u + '"' + (cls ? ' class="' + cls + '"' : '') + '>' : '<span class="dot" style="--c:' + b.color + '"></span>';
+  }
+
+  // ------------------------------------------------------------------ swatches + gang
+  var swEl = $('swatches'), gangEl = $('gang');
+  function buildPickers() {
+    swEl.innerHTML = BL.map(function (b) {
+      return '<button type="button" class="sw" role="radio" data-b="' + b.name + '" style="--t:' + TINT[b.name] + '" aria-label="' + b.name + ', ' + b.colorName + '">' + blorbIcon(b.name) + '</button>';
+    }).join('');
+    gangEl.innerHTML = BL.map(function (b) {
+      return '<button type="button" class="mate" data-b="' + b.name + '" style="--t:' + TINT[b.name] + '"><span class="im">' + blorbIcon(b.name) + '</span><b>' + b.name + '</b><span>' + esc(b.line.split('.')[0]) + '</span></button>';
+    }).join('');
+    markPickers();
+  }
+  function refreshIcons() {
+    [].forEach.call(document.querySelectorAll('.sw, .mate'), function (el) {
+      var n = el.getAttribute('data-b'), host = el.classList.contains('mate') ? el.querySelector('.im') : el, u = imgFor(n, 'sprite');
+      if (u && !host.querySelector('img')) host.innerHTML = '<img alt="" src="' + u + '">';
+    });
+  }
+  function markPickers() {
+    [].forEach.call(swEl.children, function (el) {
+      var n = el.getAttribute('data-b'), on = n === sel;
+      el.setAttribute('aria-checked', on ? 'true' : 'false'); el.tabIndex = on ? 0 : -1;
+      el.classList.toggle('out', left(n) === 0);
+    });
+    [].forEach.call(gangEl.children, function (el) { el.setAttribute('aria-current', el.getAttribute('data-b') === sel ? 'true' : 'false'); });
+  }
+  swEl.addEventListener('click', function (e) { var t = e.target.closest('.sw'); if (t) choose(t.getAttribute('data-b')); });
+  swEl.addEventListener('keydown', function (e) {
+    var k = e.key, d = (k === 'ArrowRight' || k === 'ArrowDown') ? 1 : (k === 'ArrowLeft' || k === 'ArrowUp') ? -1 : 0;
+    if (!d) return; e.preventDefault();
+    var n = BL[(byName[sel].i + d + BL.length) % BL.length].name; choose(n); swEl.querySelector('[data-b="' + n + '"]').focus();
+  });
+  gangEl.addEventListener('click', function (e) {
+    var t = e.target.closest('.mate'); if (!t) return;
+    choose(t.getAttribute('data-b'));
+    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+  });
+
+  // ------------------------------------------------------------------ the info column
+  function renderInfo() {
+    var b = byName[sel];
+    $('pname').textContent = b.name; $('pline').textContent = b.line; $('colName').textContent = b.colorName;
+    ['addName', 'addName2', 'endName', 'boxName'].forEach(function (id) { $(id).textContent = b.name; });
+    document.documentElement.style.setProperty('--tint', TINT[b.name]);
+    document.documentElement.style.setProperty('--body', b.color);
+    $('view').setAttribute('aria-label', '3D view of ' + b.name + '. drag to spin it, tap its belly.');
+    document.title = 'get ' + b.name + ' · blorbs';
+    $('boxBlorb').innerHTML = blorbIcon(b.name);
+    renderViews(); renderBuy(); markPickers();
+  }
+  function renderViews() {
+    [].forEach.call(document.querySelectorAll('img[data-v]'), function (im) { var u = imgFor(sel, im.getAttribute('data-v')); if (u) im.src = u; else im.removeAttribute('src'); });
+    var s = stills[sel];
+    if (s) {
+      $('imgBack').src = s.backBig || s.back; $('imgFront').src = s.frontBig || s.front;
+      ['pulseA', 'pulseB'].forEach(function (id) { $(id).style.left = s.belly[0] + '%'; $(id).style.top = s.belly[1] + '%'; });
+    }
+  }
+  function renderBuy() {
+    var l = left(sel), room = canHave(sel) - inBag(sel), out = l === 0;
+    qty = clamp(qty, 1, Math.max(1, room));
+    $('qOut').textContent = qty;
+    $('qMinus').disabled = qty <= 1; $('qPlus').disabled = qty >= room;
+    var add = $('addBtn'), add2 = $('addBtn2');
+    add.disabled = add2.disabled = out || room <= 0;
+    var st = $('stock');
+    if (out) { st.hidden = false; st.textContent = byName[sel].name + ' is sold out for now. back soon.'; }
+    else if (room <= 0) { st.hidden = false; st.textContent = 'you’ve got all the ' + byName[sel].name + 's we have in your bag.'; }
+    else if (l !== null && l <= 5) { st.hidden = false; st.textContent = 'only ' + l + ' left'; }
+    else st.hidden = true;
+  }
+  $('qMinus').addEventListener('click', function () { qty--; renderBuy(); });
+  $('qPlus').addEventListener('click', function () { qty++; renderBuy(); });
+
+  function choose(name) {
+    if (!byName[name] || name === sel) return;
+    sel = name; qty = 1;
+    try { history.replaceState(null, '', '?b=' + name); } catch (e) {}
+    renderInfo(); stage.show(name);
+  }
+
+  // ------------------------------------------------------------------ adding + the drawer
+  var dlg = $('bag'), bagBtn = $('bagBtn');
+  function add() {
+    var room = canHave(sel) - inBag(sel); if (room <= 0) return;
+    setLine(sel, inBag(sel) + Math.min(qty, room));
+    qty = 1; renderBuy();
+    bagBtn.classList.remove('hop'); void bagBtn.offsetWidth; bagBtn.classList.add('hop');
+    openBag();
+  }
+  $('addBtn').addEventListener('click', add);
+  $('addBtn2').addEventListener('click', add);
+
+  function openBag() {
+    $('msg').hidden = true;
+    if (dlg.showModal) { if (!dlg.open) dlg.showModal(); } else dlg.setAttribute('open', '');
+  }
+  function closeBag() { if (dlg.close) dlg.close(); else dlg.removeAttribute('open'); }
+  bagBtn.addEventListener('click', openBag);
+  $('bagClose').addEventListener('click', closeBag);
+  $('emptyBtn').addEventListener('click', function () { closeBag(); $('addBtn').focus(); });
+  dlg.addEventListener('click', function (e) { if (e.target === dlg) closeBag(); });   // click on the dimmed backdrop
+
+  function renderBag() {
+    var n = bagTotal(), sub = 0;
+    $('bagCount').textContent = n;
+    bagBtn.setAttribute('aria-label', 'bag, ' + n + (n === 1 ? ' blorb' : ' blorbs'));
+    $('lines').innerHTML = bag.map(function (l) {
+      var b = byName[l.b], room = canHave(l.b); sub += l.q * CFG.price;
+      return '<li class="ln" data-b="' + l.b + '"><span class="im" style="--t:' + TINT[l.b] + '">' + blorbIcon(l.b) + '</span>' +
+        '<span><b>' + b.name + '</b><span class="col">' + b.colorName + '</span>' +
+        '<span class="qty" role="group" aria-label="how many ' + b.name + '"><button type="button" data-d="-1" aria-label="one fewer ' + b.name + '">−</button><output>' + l.q + '</output><button type="button" data-d="1" aria-label="one more ' + b.name + '"' + (l.q >= room ? ' disabled' : '') + '>+</button></span></span>' +
+        '<span class="end"><span class="lp">' + money(l.q * CFG.price) + '</span><button type="button" class="rm" data-rm="1">remove</button></span></li>';
+    }).join('');
+    $('subtotal').textContent = money(sub);
+    $('empty').hidden = n > 0; $('dfoot').hidden = n === 0; $('lines').hidden = n === 0;
+  }
+  $('lines').addEventListener('click', function (e) {
+    var li = e.target.closest('.ln'); if (!li) return;
+    var name = li.getAttribute('data-b'), d = e.target.closest('[data-d]');
+    if (e.target.closest('[data-rm]')) setLine(name, 0);
+    else if (d) setLine(name, inBag(name) + (+d.getAttribute('data-d')));
+  });
+
+  // ------------------------------------------------------------------ checkout
+  // Sends only which blorbs and how many. The checkout worker looks up the real price and
+  // answers with the address of the secure payment page, e.g. { "url": "https://checkout.stripe.com/..." }.
+  var coBtn = $('checkout'), coLabel = coBtn.innerHTML;
+  function say(html) { var m = $('msg'); m.innerHTML = html; m.hidden = false; }
+  coBtn.addEventListener('click', function () {
+    if (!bag.length) return;
+    if (!CFG.checkoutUrl) {
+      say('<b>checkout isn’t open yet.</b> blorbs aren’t out yet. your bag will wait here, and if you <a href="/#waitlist">join the waitlist</a> we’ll tell you the minute they are.');
+      return;
+    }
+    coBtn.disabled = true; coBtn.textContent = 'opening checkout...'; $('msg').hidden = true;
+    fetch(CFG.checkoutUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ items: bag.map(function (l) { return { blorb: l.b, qty: l.q }; }) }) })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok, j: j }; }); })
+      .then(function (res) {
+        var u = res.j && res.j.url;
+        if (res.ok && typeof u === 'string' && /^https:\/\//.test(u)) { location.href = u; return; }
+        throw new Error((res.j && res.j.error) || 'no checkout address');
+      })
+      .catch(function (err) {
+        coBtn.disabled = false; coBtn.innerHTML = coLabel;
+        var why = err && err.message && err.message.length < 140 && !/fetch|network|load/i.test(err.message) ? ' (' + esc(err.message) + ')' : '';
+        say('<b>checkout didn’t open.</b> nothing was charged. try again in a moment, or write to <a href="mailto:hello@blorb.app">hello@blorb.app</a>' + why + '.');
+      });
+  });
+
+  // ------------------------------------------------------------------ the 3D stage
+  var stage = (function () {
+    var box = $('stagebox'), canvas = $('view'), ok = !!window.THREE && !!window.Blorb3D, R, scene, cam, shadowPlane, ray;
+    var groups = {}, queue = [], cur = null, prev = null, W = 1, H = 1, running = false, visible = true;
+    var VIEW = { front: -0.18, side: 1.12, back: Math.PI };
+    var st = { ry: VIEW.front, goal: VIEW.front, vel: 0, drag: false, sq: 0, idle: 0, t0: 0, prevT0: 0 };
+    if (ok) { try { R = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true, preserveDrawingBuffer: false }); } catch (e) { ok = false; } }
+    if (!ok) {
+      box.insertAdjacentHTML('beforeend', '<div class="nogl"><div><div class="blob"></div><p style="margin-top:18px;font-weight:800">the spinning blorb needs WebGL, which this browser has switched off.</p></div></div>');
+      $('hint').hidden = true; document.querySelector('.views').hidden = true;
+      return { show: function () {}, ready: false };
+    }
+
+    R.outputEncoding = THREE.sRGBEncoding;
+    R.shadowMap.enabled = true; R.shadowMap.type = THREE.PCFSoftShadowMap;
+    scene = new THREE.Scene();
+    cam = new THREE.PerspectiveCamera(22, 1, 0.1, 100);
+    var ec = document.createElement('canvas'); ec.width = 512; ec.height = 256;
+    var g = ec.getContext('2d'), gr = g.createLinearGradient(0, 0, 0, 256);
+    gr.addColorStop(0, '#ffffff'); gr.addColorStop(0.45, '#e6e6ea'); gr.addColorStop(1, '#a9a6a0');
+    g.fillStyle = gr; g.fillRect(0, 0, 512, 256);
+    g.fillStyle = '#ffffff'; g.filter = 'blur(10px)'; g.fillRect(60, 30, 120, 70); g.fillRect(330, 50, 90, 50);
+    var et = new THREE.CanvasTexture(ec); et.mapping = THREE.EquirectangularReflectionMapping; et.encoding = THREE.sRGBEncoding;
+    var pm = new THREE.PMREMGenerator(R); scene.environment = pm.fromEquirectangular(et).texture; et.dispose(); pm.dispose();
+    scene.add(new THREE.HemisphereLight(0xffffff, 0xcfcbc4, 0.25));
+    var key = new THREE.DirectionalLight(0xffffff, 0.42); key.position.set(-5, 7, 9); key.castShadow = true;
+    key.shadow.mapSize.set(2048, 2048);
+    var sc = key.shadow.camera; sc.left = -5; sc.right = 5; sc.top = 5; sc.bottom = -5; sc.near = 1; sc.far = 30;
+    key.shadow.bias = -0.0006; key.shadow.normalBias = 0.02; key.shadow.radius = 5;
+    scene.add(key);
+    shadowPlane = new THREE.Mesh(new THREE.PlaneGeometry(60, 40), new THREE.ShadowMaterial({ opacity: 0.16, color: 0x1E1D1F }));
+    shadowPlane.receiveShadow = true; scene.add(shadowPlane);
+    ray = new THREE.Raycaster();
+    var magnetMat = new THREE.MeshStandardMaterial({ color: 0xcfd2d6, metalness: 1, roughness: 0.28 });
+    var SIZE = 2.15;   // longest side of the blorb, in world units
+
+    function build(name) {
+      if (groups[name]) return groups[name];
+      var gp = Blorb3D.build(byName[name], { maxAniso: R.capabilities.getMaxAnisotropy(), magnetMaterial: magnetMat });
+      var u = gp.userData; u.s = SIZE / Math.max(u.width, u.height);
+      gp.visible = false; scene.add(gp); groups[name] = gp;
+      makeStills(name);
+      return gp;
+    }
+
+    // still pictures for the swatches, thumbnails and detail cards (same trick as the homepage avatars)
+    function makeStills(name) {
+      var gp = groups[name], u = gp.userData, out = {}, vis = {};
+      var oc = new THREE.OrthographicCamera(-1.25, 1.25, 1.25, -1.25, 0.1, 60); oc.position.set(0, 0, 20);
+      Object.keys(groups).forEach(function (k) { vis[k] = groups[k].visible; groups[k].visible = false; });
+      shadowPlane.visible = false;
+      var keep = { p: gp.position.clone(), r: gp.rotation.clone(), s: gp.scale.clone() };
+      gp.visible = true; gp.position.set(0, 0, 0); gp.scale.setScalar(2.2 / Math.max(u.width, u.height));
+      function shot(ry, px) { R.setPixelRatio(1); R.setSize(px, px, false); gp.rotation.set(0, ry, 0); gp.updateMatrixWorld(true); R.render(scene, oc); return canvas.toDataURL('image/png'); }
+      out.sprite = shot(-0.2, 200);
+      out.front = shot(VIEW.front, 300); out.side = shot(VIEW.side, 300); out.back = shot(VIEW.back + 0.25, 300);
+      out.frontBig = shot(0, 720); out.backBig = shot(VIEW.back + 0.25, 720);
+      var b = u.belly.clone(); gp.rotation.set(0, 0, 0); gp.updateMatrixWorld(true); gp.localToWorld(b); b.project(oc);
+      out.belly = [(b.x * 0.5 + 0.5) * 100, (-b.y * 0.5 + 0.5) * 100];
+      gp.position.copy(keep.p); gp.rotation.copy(keep.r); gp.scale.copy(keep.s);
+      Object.keys(groups).forEach(function (k) { groups[k].visible = vis[k]; });
+      shadowPlane.visible = true;
+      stills[name] = out;
+      resize(true);
+      refreshIcons(); renderBag();
+      if (name === sel) { renderViews(); $('boxBlorb').innerHTML = blorbIcon(name); }
+    }
+
+    function resize(force) {
+      var w = box.clientWidth, h = box.clientHeight;
+      if (!force && w === W && h === H) return;
+      W = w; H = h;
+      R.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2)); R.setSize(W, H, false);
+      cam.aspect = W / H;
+      // fit about 3.3 units tall, but never let the blorb get too wide for a narrow box
+      var viewH = Math.max(3.3, 3.3 * 0.9 / Math.min(1, W / H));
+      cam.position.set(0, 0, (viewH / 2) / Math.tan(cam.fov / 2 * Math.PI / 180));
+      cam.updateProjectionMatrix();
+      draw(performance.now());
+    }
+
+    function show(name) {
+      var gp = build(name);
+      if (cur && cur !== gp) { prev = cur; st.prevT0 = performance.now(); }
+      cur = gp; cur.visible = true; st.t0 = performance.now() + (prev ? 140 : 0);
+      st.ry = VIEW.front - 0.9; st.goal = VIEW.front; st.vel = 0; st.idle = 0;
+      setView('front', true);
+      wake();
+    }
+
+    function backOut(t) { var c = 1.7; t = clamp(t, 0, 1) - 1; return 1 + (c + 1) * t * t * t + c * t * t; }
+    var tmp = new THREE.Vector3();
+    function screenOf(gp, v) { tmp.copy(v); gp.localToWorld(tmp); tmp.project(cam); return [(tmp.x * 0.5 + 0.5) * W, (-tmp.y * 0.5 + 0.5) * H]; }
+    function pose(gp, ry, k, sq) {
+      var u = gp.userData, s = u.s * k;
+      // pull it off the "fridge door" as it turns, so it never sinks into the wall
+      var z = (1 - Math.cos(ry)) / 2 * (u.depth * s + 0.1) + Math.abs(Math.sin(ry)) * (u.width * s / 2 + 0.05);
+      gp.rotation.set(0, ry, 0);
+      gp.position.set(0, -0.05 + (1 - k) * -0.4, z + 0.002);
+      gp.scale.set(s * (1 + 0.07 * sq), s * (1 - 0.11 * sq), s);
+      gp.updateMatrixWorld(true);
+    }
+
+    var coA = $('coA'), coB = $('coB'), pA = $('coPathA'), pB = $('coPathB'), dA = $('coDotA'), dB = $('coDotB'), ring = $('ring');
+    function callout(el, path, dot, at, f, dir) {
+      el.style.opacity = f; path.style.opacity = f; dot.style.opacity = f;
+      if (f <= 0.01) return;
+      var ew = el.offsetWidth, eh = el.offsetHeight, pad = 16;
+      var lx = at[0] + dir[0] * Math.max(70, W * 0.16), ly = at[1] + dir[1] * Math.max(60, H * 0.15);
+      lx = clamp(lx, pad + (dir[0] < 0 ? ew : 0), W - pad - (dir[0] < 0 ? 0 : ew));
+      ly = clamp(ly, pad + eh / 2, H - pad - eh / 2 - 30);
+      el.style.transform = 'translate(' + (dir[0] < 0 ? lx - ew : lx) + 'px,' + (ly - eh / 2) + 'px)';
+      var ex = dir[0] < 0 ? lx + 8 : lx - 8;
+      path.setAttribute('d', 'M' + at[0] + ' ' + at[1] + ' C' + (at[0] + dir[0] * 20) + ' ' + (at[1] + dir[1] * 34) + ' ' + (ex - dir[0] * 34) + ' ' + ly + ' ' + ex + ' ' + ly);
+      dot.setAttribute('cx', at[0]); dot.setAttribute('cy', at[1]);
+    }
+
+    var last = 0;
+    function draw(t) {
+      if (!cur) return;
+      var dt = Math.min(0.05, (t - (last || t)) / 1000); last = t;
+      // spin: follow the finger while dragging, otherwise ease toward the chosen view with a little idle sway
+      if (!st.drag) {
+        st.idle += dt;
+        var sway = (st.idle > 2.5 && !reduce && Math.cos(st.goal) > 0.9) ? Math.sin((st.idle - 2.5) * 0.7) * 0.22 : 0;
+        var target = st.goal + sway;
+        st.vel += ((target - st.ry) * 26 - st.vel * 9) * dt;
+        st.ry += st.vel * dt;
+      }
+      st.sq *= Math.pow(0.0015, dt);
+      var sqv = st.sq * Math.cos((1 - st.sq) * 9);
+      var kin = clamp((t - st.t0) / 560, 0, 1), k = reduce ? (kin > 0 ? 1 : 0.001) : Math.max(0.001, backOut(kin));
+      cur.visible = t >= st.t0;
+      pose(cur, st.ry, k, sqv);
+      if (prev) {
+        var ko = clamp((t - st.prevT0) / 220, 0, 1);
+        if (ko >= 1) { prev.visible = false; prev = null; }
+        else pose(prev, prev.rotation.y + dt * 4, Math.max(0.001, 1 - ko), 0);
+      }
+      R.render(scene, cam);
+
+      // callouts: belly from the front, magnet from the back
+      var c = Math.cos(st.ry), show = kin >= 1 ? 1 : 0;
+      callout(coA, pA, dA, screenOf(cur, cur.userData.belly), clamp((c - 0.6) / 0.25, 0, 1) * show * (st.drag ? 0.4 : 1), [1, -1]);
+      var mag = cur.children[1];
+      if (mag) callout(coB, pB, dB, screenOf(cur, mag.position), clamp((-c - 0.6) / 0.25, 0, 1) * show, [1, -0.8]);
+    }
+    function frame(t) {
+      if (!visible || document.hidden) { running = false; return; }
+      resize(false); draw(t);
+      requestAnimationFrame(frame);
+    }
+    function wake() { if (!running) { running = true; last = 0; requestAnimationFrame(frame); } }
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { visible = es[0].isIntersecting; if (visible) wake(); }).observe(box);
+    document.addEventListener('visibilitychange', function () { if (!document.hidden) wake(); });
+    window.addEventListener('resize', function () { resize(false); });
+
+    // views (front / side / back thumbnails)
+    function nearest(a) { var two = Math.PI * 2; return a + two * Math.round((st.ry - a) / two); }
+    function setView(v, quiet) {
+      if (!quiet) { st.goal = nearest(VIEW[v]); st.idle = 0; wake(); }
+      [].forEach.call(document.querySelectorAll('.view'), function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-view') === v ? 'true' : 'false'); });
+    }
+    document.querySelector('.views').addEventListener('click', function (e) { var b = e.target.closest('.view'); if (b) setView(b.getAttribute('data-view')); });
+
+    // drag to spin, tap to boop
+    var down = null, boopT = 0, locked = false, hint = $('hint');
+    box.addEventListener('pointerdown', function (e) {
+      down = { x: e.clientX, y: e.clientY, ry: st.ry, t: performance.now(), lx: e.clientX, lt: performance.now(), moved: false, id: e.pointerId };
+    });
+    box.addEventListener('pointermove', function (e) {
+      if (!down || e.pointerId !== down.id) return;
+      var dx = e.clientX - down.x;
+      if (!down.moved && Math.abs(dx) > 6 && Math.abs(dx) > Math.abs(e.clientY - down.y)) {
+        down.moved = true; st.drag = true; box.classList.add('drag');
+        try { box.setPointerCapture(e.pointerId); } catch (err) {}
+      }
+      if (!down.moved) return;
+      var now = performance.now();
+      st.vel = (e.clientX - down.lx) / Math.max(1, now - down.lt) * 1000 * 0.011;
+      down.lx = e.clientX; down.lt = now;
+      st.ry = down.ry + dx * 0.011; st.idle = 0; hint.style.opacity = 0; wake();
+    });
+    function up(e) {
+      if (!down || e.pointerId !== down.id) return;
+      if (down.moved) {
+        st.drag = false; box.classList.remove('drag');
+        var fling = st.ry + clamp(st.vel, -12, 12) * 0.18;
+        var a = Math.abs(Math.atan2(Math.sin(fling), Math.cos(fling)));     // 0 = facing you, PI = back
+        st.goal = fling; st.vel = 0;
+        setView(a > 2.3 ? 'back' : a > 0.7 ? 'side' : 'front', true);
+      } else if (e.type === 'pointerup') tap(e);
+      down = null;
+    }
+    box.addEventListener('pointerup', up); box.addEventListener('pointercancel', up);
+
+    var ndc = new THREE.Vector2();
+    function tap(e) {
+      if (!cur) return;
+      var r = box.getBoundingClientRect();
+      ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+      ray.setFromCamera(ndc, cam);
+      if (!ray.intersectObject(cur.userData.mesh).length) return;
+      boop(e.clientX - r.left, e.clientY - r.top);
+    }
+    function boop(x, y) {
+      st.sq = 1; locked = !locked; wake();
+      ring.style.left = x + 'px'; ring.style.top = y + 'px';
+      ring.classList.remove('go'); void ring.offsetWidth; ring.classList.add('go');
+      var b = $('boop'); b.textContent = locked ? 'blorb lock on. go be somewhere.' : 'unlocked. welcome back.';
+      b.classList.add('on'); clearTimeout(boopT); boopT = setTimeout(function () { b.classList.remove('on'); }, 1800);
+      hint.style.opacity = 0;
+    }
+
+    // build the chosen blorb first, then the rest a frame at a time so the page never stalls
+    function buildRest() {
+      var n = queue.shift(); if (!n) return;
+      build(n); requestAnimationFrame(buildRest);
+    }
+    return {
+      ready: true,
+      show: show,
+      start: function () {
+        show(sel);
+        queue = BL.map(function (b) { return b.name; }).filter(function (n) { return n !== sel; });
+        requestAnimationFrame(buildRest);
+      }
+    };
+  })();
+
+  // ------------------------------------------------------------------ go
+  buildPickers(); renderInfo(); renderBag();
+  if (stage.start) {
+    // wait for the font so the face textures and labels settle first
+    var go = function () { stage.start(); };
+    if (document.fonts && document.fonts.ready) Promise.race([document.fonts.ready, new Promise(function (r) { setTimeout(r, 1200); })]).then(go); else go();
+  }
+  if (window.fetch && /^https?:$/.test(location.protocol)) {
+    fetch('/shop/config.json', { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (c) {
+      if (!c) return;
+      if (typeof c.checkoutUrl === 'string' && /^https:\/\//.test(c.checkoutUrl)) CFG.checkoutUrl = c.checkoutUrl;
+      if (c.stock && typeof c.stock === 'object') CFG.stock = c.stock;
+      if (typeof c.price === 'number' && c.price > 0) CFG.price = c.price;
+      $('price').innerHTML = money(CFG.price) + '<small>USD</small>';
+      $('price2').textContent = money(CFG.price);
+      bag.forEach(function (l) { l.q = Math.min(l.q, canHave(l.b)); }); bag = bag.filter(function (l) { return l.q > 0; }); saveBag();
+      markPickers(); renderBuy(); renderBag();
+    }).catch(function () {});
+  }
 })();
 </script>
 </body>
