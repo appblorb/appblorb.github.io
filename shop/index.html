@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#1E1D1F">
+<meta name="robots" content="noindex">
+<title>thank you · blorbs</title>
+<link rel="icon" href="/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800;900&display=swap">
+<style>
+:root { --paper: #F2F3F0; --ink: #1E1D1F; --cream: #F3EFE6; --pad: clamp(20px, 4vw, 56px);
+  --font: 'M PLUS Rounded 1c', 'Hiragino Maru Gothic ProN', 'Arial Rounded MT Bold', 'Nunito', system-ui, sans-serif; }
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; background: var(--ink); color: var(--cream);
+  font-family: var(--font); font-weight: 500; font-size: clamp(16px, 1.25vw, 19px); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+a { color: inherit; }
+.logo { position: relative; display: block; width: 96px; aspect-ratio: 1800 / 747; margin: calc(16px + env(safe-area-inset-top, 0px)) var(--pad) 0; }
+.logo .fill { position: absolute; inset: 0; background: var(--cream);
+  -webkit-mask: url("/assets/logo-mask.webp") center / 100% 100% no-repeat; mask: url("/assets/logo-mask.webp") center / 100% 100% no-repeat; }
+main { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px var(--pad) 60px; }
+#gang { width: min(720px, 100%); aspect-ratio: 3 / 1; display: block; }
+h1 { margin: .3em 0 0; font-weight: 900; font-size: clamp(52px, 8vw, 120px); line-height: .95; letter-spacing: -0.03em; }
+p { margin: 1em auto 0; max-width: 28em; font-size: 1.1em; }
+.small { font-size: .9em; color: #B7B4BD; }
+.btn { display: inline-flex; align-items: center; min-height: 54px; margin-top: 1.8em; padding: 10px 28px; border-radius: 999px; background: var(--cream); color: var(--ink); font-weight: 800; text-decoration: none; }
+.foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; padding: 22px var(--pad) calc(26px + env(safe-area-inset-bottom, 0px)); font-size: .9em; font-weight: 700; }
+</style>
+</head>
+<body>
+<a class="logo" href="/" aria-label="blorb home"><span class="fill"></span></a>
+<main>
+  <canvas id="gang" aria-hidden="true"></canvas>
+  <h1>thank you!</h1>
+  <p>your order’s in, and your blorb is getting ready to leave home. your receipt is on its way to your inbox.</p>
+  <p class="small">questions about your order? write to <a href="mailto:hello@blorb.app">hello@blorb.app</a>.</p>
+  <a class="btn" href="https://apps.apple.com/app/6836228369">get the app while you wait</a>
+</main>
+<footer class="foot"><span>blorbs · 2026</span><span><a href="/privacy/">privacy</a> · <a href="/terms/">terms</a> · <a href="/refunds/">refunds</a> · <a href="/support/">help</a></span><span>made for being somewhere else.</span></footer>
+
+<script>
+  // the order is paid, so the bag on this browser can be emptied
+  try { localStorage.removeItem('blorb-bag'); } catch (e) {}
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="/assets/blorbs.js"></script>
+<script>
+(function () {
+  // all six blorbs in a row, rendered once (no animation loop)
+  var c = document.getElementById('gang');
+  if (!window.THREE || !window.Blorb3D || !window.BLORBS) { c.hidden = true; return; }
+  var R;
+  try { R = new THREE.WebGLRenderer({ canvas: c, antialias: true, alpha: true }); } catch (e) { c.hidden = true; return; }
+  function draw() {
+    var w = c.clientWidth, h = c.clientHeight;
+    R.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2)); R.setSize(w, h, false); R.outputEncoding = THREE.sRGBEncoding;
+    var scene = new THREE.Scene(), n = BLORBS.length, span = 2.35, aspect = w / h, halfW = n * span / 2, halfH = halfW / aspect;
+    var cam = new THREE.OrthographicCamera(-halfW, halfW, halfH, -halfH, 0.1, 60); cam.position.set(0, 0, 20);
+    scene.add(new THREE.HemisphereLight(0xffffff, 0xcfcbc4, 0.9));
+    var key = new THREE.DirectionalLight(0xffffff, 0.7); key.position.set(-5, 7, 9); scene.add(key);
+    var mag = new THREE.MeshStandardMaterial({ color: 0xcfd2d6, metalness: 1, roughness: 0.3 });
+    var tilt = [-0.25, 0.15, -0.1, 0.25, -0.2, 0.1];
+    BLORBS.forEach(function (b, i) {
+      var g = Blorb3D.build(b, { magnetMaterial: mag, roughness: 0.55 }), u = g.userData, s = 2.0 / Math.max(u.width, u.height);
+      g.scale.setScalar(s); g.rotation.set(0, tilt[i], 0);
+      g.position.set(-halfW + span * (i + 0.5), -halfH + 0.25 + u.height * s / 2, 0);   // standing on one shared floor
+      scene.add(g);
+    });
+    R.render(scene, cam);
+  }
+  var go = function () { draw(); };
+  if (document.fonts && document.fonts.ready) Promise.race([document.fonts.ready, new Promise(function (r) { setTimeout(r, 1000); })]).then(go); else go();
+})();
+</script>
+</body>
+</html>
